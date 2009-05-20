@@ -9,18 +9,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import solution.CargoException;
 import solution.CargoInventory;
 import solution.ContainerLabel;
-import solution.LabelException;
 
 /**
  * @author Bodaniel Jeanes and Jacob Evans
@@ -29,17 +30,15 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     private JButton        loadBtn;
     private JButton        unloadBtn;
     private JTextArea      display;
-    private JScrollPane    textScrollPane;
+    private JTextField     input;
     private CargoInventory inventory;
+    private ContainerLabel currentContainer;
 
     public CargoManagerPanel() {
         initialiseComponents();
         try {
-            inventory = new CargoInventory(1, 1, 5);
-            inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
-        } catch (CargoException e) {
-            // error message
-        } catch (LabelException e) {
+            inventory = new CargoInventory(5, 5, 20);
+        } catch (Exception e) {
 
         }
         reDraw();
@@ -59,6 +58,8 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             loadContainer();
         } else if (source == unloadBtn) {
             unloadContainer();
+        } else if (source == input) {
+            System.out.println("pressed enter");
         }
     }
 
@@ -66,15 +67,48 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
      * 
      */
     private void unloadContainer() {
-    // TODO Auto-generated method stub
-
+        System.out.println("unloading container");
     }
 
     /**
      * 
      */
     private void loadContainer() {
+        if ((currentContainer = getContainerFromInput()) != null) {
+            try {
+                System.out.println("loading container "
+                        + currentContainer.toString());
+                inventory.loadContainer(currentContainer);
+            } catch (CargoException e) {
+                message(e.getMessage());
+            }
+        } else {
+            message("Invalid shipping container label");
+        }
 
+        input.setText("");
+    }
+
+    private void message(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
+
+    private ContainerLabel getContainerFromInput() {
+        Pattern pattern = Pattern.compile("\\d{8}");
+        Matcher matcher = pattern.matcher(input.getText());
+        if (matcher.matches()) {
+            try {
+                Integer kind = Integer.parseInt(input.getText(0, 3));
+                Integer identifier = Integer.parseInt(input.getText(3, 5));
+                Integer kindLength = kind.toString().length();
+                Integer identifierLength = identifier.toString().length();
+                return new ContainerLabel(kind, kindLength, identifier,
+                        identifierLength);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     /*
@@ -123,15 +157,16 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         display.setLineWrap(true);
         display.setFont(new Font("Courier New", Font.PLAIN, 12));
         display.setBorder(BorderFactory.createEtchedBorder());
-        textScrollPane = new JScrollPane(display);
         addToPanel(display, constraints, 0, 0, 4, 1);
 
-        JTextField input = new JTextField();
+        // input field
+        input = new JTextField();
+        input.addActionListener(this);
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.SOUTH;
-
         addToPanel(input, constraints, 0, 1, 4, 1);
+
         repaint();
     }
 
@@ -163,22 +198,22 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     }
 
     void drawContainers(ContainerLabel[] labels) {
-        // ------------ //12 Dashes
-        // | 01200432 | //
-        // ------------
-        // i.toString()
-        // display.getColumns()
-        // display.getRows()
-        // display.insert(string, int pos)
-        // display.setColumns(int)
-        // display.append(string)
-        // display.setText(str)
-        display.setText("");
-        for (ContainerLabel containerLabel : labels) {
-            display.append("-----------\n| ");
-            display.append(containerLabel.toString());
-            display.append("\n-----------");
-        }
+    // ------------ //12 Dashes
+    // | 01200432 | //
+    // ------------
+    // i.toString()
+    // display.getColumns()
+    // display.getRows()
+    // display.insert(string, int pos)
+    // display.setColumns(int)
+    // display.append(string)
+    // display.setText(str)
+    // display.setText("");
+    // for (ContainerLabel containerLabel : labels) {
+    // display.append("-----------\n| ");
+    // display.append(containerLabel.toString());
+    // display.append("\n-----------");
+    // }
     }
 
     void reDraw() {
@@ -189,7 +224,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                 localContainers = inventory.toArray(kind);
                 drawContainers(localContainers);
                 kind++;
-                System.out.print("found a container");
+                System.out.println("found a container");
             } catch (CargoException e) {
                 // we reached the end of the stacks
                 return;
