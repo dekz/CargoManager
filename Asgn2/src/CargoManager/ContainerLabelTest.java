@@ -14,9 +14,10 @@ public class ContainerLabelTest {
 	private ContainerLabel labelOne;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws LabelException {
 		labelOne = new ContainerLabel(0,1,1,1);
 	}
+	
 	//TODO add some tests for when the length of kind is smaller than what it should be
 	@Test
 	public void testConstructor()
