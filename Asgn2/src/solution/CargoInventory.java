@@ -28,10 +28,17 @@ public class CargoInventory {
 	// allowance?
 	CargoInventory(Integer numStacks, Integer maxHeight, Integer maxContainers)
 			throws CargoException, IllegalArgumentException {
-		if(numStacks == null || maxHeight == null || maxContainers == null)
+		
+		// No null parameters supported
+		if(numStacks == null || maxHeight == null || maxContainers == null) {
 			throw new IllegalArgumentException("Cannot have null values for any parameter");
-		if ((numStacks < 0) || (maxHeight < 0) || (maxContainers < 0))
+		}
+		
+		// No negative numbers supported
+		if ((numStacks < 0) || (maxHeight < 0) || (maxContainers < 0)) {
 			throw new CargoException("Cannot have negative values");
+		}
+		
 		this.numStacks = numStacks;
 		this.maxHeight = maxHeight;
 		this.maxContainers = maxContainers;
@@ -49,12 +56,15 @@ public class CargoInventory {
 		if (queryContainer == null) {
 			throw new IllegalArgumentException();
 		}
+		
 		topContainer = storage.get(queryContainer.getKind()).get(
 				(storage.get(queryContainer.getKind()).size()) - 1);
+		
 		if (topContainer.equals(queryContainer)) {
 			return true;
-		} else
+		} else {
 			return false;
+		}
 	}
 
 	boolean isOnboard(ContainerLabel queryContainer)
@@ -62,8 +72,9 @@ public class CargoInventory {
 		if (queryContainer != null) {
 			return storage.get(queryContainer.getKind()).contains(
 					queryContainer);
-		} else
+		} else {
 			throw new IllegalArgumentException();
+		}
 	}
 
 	void loadContainer(ContainerLabel newContainer) throws CargoException,
@@ -74,17 +85,19 @@ public class CargoInventory {
 		if (newContainer.getKind() <= numStacks) {
 			// check we aren't going over our limits
 			if (storage.get(newContainer.getKind()).size() < maxHeight) {
-				if ((!isOnboard(newContainer))
-						&& (currentContainers < maxContainers))
+				if ((!isOnboard(newContainer)) && (currentContainers < maxContainers)) {
 
 					storage.get(newContainer.getKind()).add(newContainer);
+				}
 				currentContainers++;
 
-			} else
+			} else {
 				throw new CargoException(
 						"Stack is too high or too many containers");
-		} else
+			}
+		} else {
 			throw new CargoException("Kind is not within our range");
+		}
 
 	}
 
@@ -94,26 +107,31 @@ public class CargoInventory {
 		if (kind < 0) {
 			throw new IllegalArgumentException();
 		}
+		
 		ContainerLabel[] returnArray = new ContainerLabel[maxHeight];
-		if (kind < numStacks)
+		
+		if (kind < numStacks) {
 			return storage.get(kind).toArray(returnArray);
-		else
+		} else {
 			throw new CargoException("Kind it out of our range");
+		}
 	}
 
 	void unloadContainer(ContainerLabel oldContainer) throws CargoException,
 			IllegalArgumentException {
 		// check if the cargo is at the top of the stack
-		if (oldContainer == null)
+		if (oldContainer == null) {
 			throw new IllegalArgumentException();
+		}
+		
 		if (isOnboard(oldContainer)) {
 			if (isAccessible(oldContainer)) {
 				// remove the container
 				storage.get(oldContainer.getKind()).remove(oldContainer);
 				currentContainers--;
-			} else
+			} else {
 				throw new CargoException("Cannot access the container");
+			}
 		}
 	}
-
 }
