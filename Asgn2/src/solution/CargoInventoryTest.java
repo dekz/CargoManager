@@ -427,4 +427,9 @@ public class CargoInventoryTest {
         inventory.toArray(null);
     }
 
+    @Test(expected = CargoException.class)
+    public void testToArrayThrowsCargoExceptionWhenTheStackDoesNotExist()
+            throws IllegalArgumentException, CargoException {
+        inventory.toArray(100);
+    }
 }
