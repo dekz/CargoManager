@@ -326,8 +326,8 @@ public class CargoInventoryTest {
      * @throws CargoException
      */
     @Test(expected = CargoException.class)
-    public void testUnloadBottomContainer() throws LabelException,
-            CargoException {
+    public void testUnloadContainerThrowsCargoExceptionWhenContainerNotAtTop()
+            throws LabelException, CargoException {
         final ContainerLabel containerOne = new ContainerLabel(1, 1, 1, 1);
         final ContainerLabel containerTwo = new ContainerLabel(1, 1, 2, 1);
 
@@ -430,6 +430,6 @@ public class CargoInventoryTest {
     @Test(expected = CargoException.class)
     public void testToArrayThrowsCargoExceptionWhenTheStackDoesNotExist()
             throws IllegalArgumentException, CargoException {
-        inventory.toArray(100);
+        inventory.toArray(3);
     }
 }
