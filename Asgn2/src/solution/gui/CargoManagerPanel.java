@@ -51,42 +51,25 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
      */
 
     // @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
+    public void actionPerformed(ActionEvent event) {
+        Object source = event.getSource();
 
-        if (source == loadBtn) {
-            loadContainer();
-        } else if (source == unloadBtn) {
-            unloadContainer();
-        } else if (source == input) {
-            System.out.println("pressed enter");
-        }
-    }
-
-    /**
-     * 
-     */
-    private void unloadContainer() {
-        System.out.println("unloading container");
-    }
-
-    /**
-     * 
-     */
-    private void loadContainer() {
         if ((currentContainer = getContainerFromInput()) != null) {
             try {
                 System.out.println("loading container "
                         + currentContainer.toString());
-                inventory.loadContainer(currentContainer);
+                if (source == loadBtn) {
+                    inventory.loadContainer(currentContainer);
+                } else if (source == unloadBtn) {
+                    inventory.unloadContainer(currentContainer);
+                }
             } catch (CargoException e) {
                 message(e.getMessage());
             }
         } else {
+            input.setText("");
             message("Invalid shipping container label");
         }
-
-        input.setText("");
     }
 
     private void message(String msg) {
@@ -106,6 +89,8 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                         identifierLength);
             } catch (Exception e) {
                 return null;
+            } finally {
+                input.setText("");
             }
         }
         return null;
