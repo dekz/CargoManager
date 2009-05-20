@@ -1,6 +1,5 @@
 package CargoManager;
 
-
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -22,7 +21,28 @@ public class ContainerLabelTest {
 	@Test
 	public void testConstructor()
 	{
-		 assertTrue(labelOne.getKind() == 0);
+		 assertEquals(new Integer(0), labelOne.getKind());
+		 assertEquals(new Integer(1), labelOne.getIdentifier());
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenFirstArgumentIsNull() throws LabelException {
+		new ContainerLabel(null, 0, 0, 0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenSecondArgumentIsNull() throws LabelException {
+		new ContainerLabel(0, null, 0, 0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenThirdArgumentIsNull() throws LabelException {
+		new ContainerLabel(0, 0, null, 0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenFourthArgumentIsNull() throws LabelException {
+		new ContainerLabel(0, 0, 0, null);
 	}
 	
 	@Test
