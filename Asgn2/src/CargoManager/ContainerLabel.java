@@ -49,28 +49,9 @@ public class ContainerLabel {
 
 		return false;
 	}
-	
-	@Override public String toString()
-	{
-		String localString = "";
-		int localKindLength = kindLength;
-		int localIdentLength = identifierLength;
-		//quite messy
-		while(localKindLength < 3)
-		{
-			localString += "0";
-			localKindLength++;
-		}
-		localString += kind;
-		
-		while(localIdentLength < 5)
-		{
-			localString += "0";
-			localIdentLength++;
-		}
-		localString += identifier;
 
-		return localString;
+	@Override
+	public String toString() {
+		return String.format("%1$03d%2$05d", kind, identifier);
 	}
 }
-
