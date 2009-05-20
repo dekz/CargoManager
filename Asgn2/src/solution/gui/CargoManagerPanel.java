@@ -63,6 +63,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                 } else if (source == unloadBtn) {
                     inventory.unloadContainer(currentContainer);
                 }
+                reDraw();
             } catch (CargoException e) {
                 message(e.getMessage());
             }
@@ -183,22 +184,22 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     }
 
     void drawContainers(ContainerLabel[] labels) {
-    // ------------ //12 Dashes
-    // | 01200432 | //
-    // ------------
-    // i.toString()
-    // display.getColumns()
-    // display.getRows()
-    // display.insert(string, int pos)
-    // display.setColumns(int)
-    // display.append(string)
-    // display.setText(str)
-    // display.setText("");
-    // for (ContainerLabel containerLabel : labels) {
-    // display.append("-----------\n| ");
-    // display.append(containerLabel.toString());
-    // display.append("\n-----------");
-    // }
+        // ------------ //12 Dashes
+        // | 01200432 | //
+        // ------------
+        // i.toString()
+        // display.getColumns()
+        // display.getRows()
+        // display.insert(string, int pos)
+        // display.setColumns(int)
+        // display.append(string)
+        // display.setText(str)
+        // display.setText("");
+        for (ContainerLabel containerLabel : labels) {
+            display.append("-----------\n| ");
+            display.append(containerLabel.toString());
+            display.append("\n-----------");
+        }
     }
 
     void reDraw() {
@@ -210,11 +211,10 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                 drawContainers(localContainers);
                 kind++;
                 System.out.println("found a container");
-            } catch (CargoException e) {
+            } catch (Exception e) {
                 // we reached the end of the stacks
                 return;
             }
-
         }
     }
 }
