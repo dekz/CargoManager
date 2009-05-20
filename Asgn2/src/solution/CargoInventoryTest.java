@@ -28,6 +28,8 @@ public class CargoInventoryTest {
 		inventoryOne = new CargoInventory(3,3,10);
 	}
 	
+	
+	// Constructor Tests
 	@Test(expected=IllegalArgumentException.class)
 	public void testConstructorThrowsIllegalArgumentExceptionWhenFirstParameterIsNull() throws CargoException {
 		new CargoInventory(null, 1, 1);
@@ -43,6 +45,23 @@ public class CargoInventoryTest {
 		new CargoInventory(1, 1, null);
 	}
 	
+	@Test(expected=CargoException.class)
+	public void testConstructorThrowsCargoExceptionIfFirstParameterIsNegative() throws CargoException {
+		new CargoInventory(-1,1,1);
+	}
+	
+	@Test(expected=CargoException.class)
+	public void testConstructorThrowsCargoExceptionIfSecondParameterIsNegative() throws CargoException {
+		new CargoInventory(1,-1,1);
+	}
+	
+	@Test(expected=CargoException.class)
+	public void testConstructorThrowsCargoExceptionIfThirdParameterIsNegative() throws CargoException {
+		new CargoInventory(1,1,-1);
+	}
+	
+	
+	// loadContainer() tests	
 	@Test
 	public void testAdddingContainer() throws LabelException, CargoException
 	{
@@ -50,188 +69,9 @@ public class CargoInventoryTest {
 		inventoryOne.loadContainer(containerOne);
 	}
 	
-	@Test
-	public void testOnBoard() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
-		assertTrue(inventoryOne.isOnboard(containerOne));
-	}
-	
-	/**
-	 * This will return false as the item is not aboard the cargo ship
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test
-	public void testOnBoardNotOnboard() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		assertFalse(inventoryOne.isOnboard(containerOne));
-	}
-	
-	/**
-	 * This will throw a IllegalArgumentException as its given a null object
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testOnBoardNullObject() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = null;
-		assertFalse(inventoryOne.isOnboard(containerOne));
-	}
-	
-	
-	/**
-	 * This should return true as the container is the top of the stack
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test
-	public void testIsAccessible() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
-		assertTrue(inventoryOne.isAccessible(containerOne));
-	}
-	
-	/**
-	 * This should return false as the container isn't the top of the stack
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test
-	public void testIsAccessibleTwoCargo() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		
-		assertFalse(inventoryOne.isAccessible(containerOne));
-	}
-	
-	/**
-	 * This should not throw any exceptions as the container is the top of the stack
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test
-	public void testUnloadTopContainer() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		
-		inventoryOne.unloadContainer(containerTwo);
-	}
-	
-	/**
-	 * This should throw a CargoException as the container isn't at the top of the stack
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test(expected = CargoException.class)
-	public void testUnloadBottomContainer() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		
-		inventoryOne.unloadContainer(containerOne);
-	}
-	
-	/**
-	 * This should throw a IllegalArgumentException as we can't unload null
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testUnloadNullContainerThrowsExceptionOnInventoryWithCargo() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
-		
-		inventoryOne.unloadContainer(null);
-	}
-	
-	/**
-	 * This should throw a IllegalArgumentException as we can't unload null
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testUnloadNullContainerThrowsExceptionOnInventoryWithoutCargo() throws LabelException, CargoException
-	{	
-		inventoryOne.unloadContainer(null);
-	}
-	
-	/**
-	 * This should throw a CargoException as the given containers are out of the range for our ship
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test(expected = CargoException.class)
-	public void testRangeOfCargoInventory() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(10,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(10,1,1,2);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		
-		inventoryOne.unloadContainer(containerOne);
-	}
-	
-	/**
-	 * This will return the 2nd stack of the inventory in the form of an array
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test
-	public void testToArray() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
-		ContainerLabel containerThree = new ContainerLabel(1,1,1,3);
-		ContainerLabel containerToNotInclude = new ContainerLabel(2,1,1,1);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		inventoryOne.loadContainer(containerThree);
-		inventoryOne.loadContainer(containerToNotInclude);
-		
-		ContainerLabel[] arrayLabels = {containerOne, containerTwo, containerThree};
-		
-		assertArrayEquals(arrayLabels, inventoryOne.toArray(1));
-	}
-	
-	/**
-	 * This will test to see if the array returns properly and returns the objects in the right order
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
-	@Test
-	public void testToArrayAndToString() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
-		ContainerLabel containerThree = new ContainerLabel(1,1,3,1);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		inventoryOne.loadContainer(containerThree);
-		
-		ContainerLabel[] arrayLabels = new ContainerLabel[3];
-		arrayLabels = inventoryOne.toArray(1);
-		
-		assertEquals("00100002", arrayLabels[1].toString());
+	@Test(expected=CargoException.class)
+	public void testLoadContainerThrowsCargoExceptionWhenAddingContainerThatHasNoStackForIt() throws IllegalArgumentException, CargoException, LabelException {
+		inventoryOne.loadContainer(new ContainerLabel(100,3,1,1));
 	}
 	
 	/**
@@ -239,7 +79,7 @@ public class CargoInventoryTest {
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
-	@Test(expected = CargoException.class)
+	@Test(expected=CargoException.class)
 	public void testTooManyContainersForShip() throws LabelException, CargoException
 	{
 		CargoInventory inventoryTwo   = new CargoInventory(100, 100, 2);
@@ -311,4 +151,233 @@ public class CargoInventoryTest {
 		// This call should raise an exception as their is only room for two stacks
 		inventoryTwo.loadContainer(containerThree); 
 	}
+	
+	// isOnBoard() tests	
+	
+	@Test
+	public void testIsOnboardWithOnlyOneItemInStack() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		inventoryOne.loadContainer(containerOne);
+		assertTrue(inventoryOne.isOnboard(containerOne));
+	}
+	
+	@Test
+	public void testIsOnboardWithMoreThanOneItemInStack() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		
+		assertTrue(inventoryOne.isOnboard(containerOne));
+	}
+	
+	/**
+	 * This will return false as the item is not aboard the cargo ship
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testIsOnboardWhenNotOnboard() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		assertFalse(inventoryOne.isOnboard(containerOne));
+	}
+	
+	/**
+	 * This will throw a IllegalArgumentException as its given a null object
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testIsOnboardNullObject() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = null;
+		assertFalse(inventoryOne.isOnboard(containerOne));
+	}
+	
+	
+	// isAccessible() tests
+	/**
+	 * This should return true as the container is the top of the stack
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testIsAccessibleReturnsTrueWhenOnlyOneItemInTheStack() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		inventoryOne.loadContainer(containerOne);
+		assertTrue(inventoryOne.isAccessible(containerOne));
+	}
+	
+	/**
+	 * This should return true as the container isn't the top of the stack
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testIsAccessibleWhenAskingForTopItemInStackWithMoreThanOneItem() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		
+		assertTrue(inventoryOne.isAccessible(containerTwo));
+	}
+	
+	/**
+	 * This should return false as the container isn't the top of the stack
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testIsAccessibleWhenAskingForNonTopItemInStackWithMoreThanOneItem() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		
+		assertFalse(inventoryOne.isAccessible(containerOne));
+	}
+	
+	@Test
+	public void testIsAccessibleReturnsFalseWhenTheContainerIsOutOfRange() throws IllegalArgumentException, LabelException {
+		ContainerLabel containerOne = new ContainerLabel(100,3,100,3);
+		assertFalse(inventoryOne.isAccessible(containerOne));
+
+	}
+	
+	// unloadContainer() tests
+	/**
+	 * This should not throw any exceptions as the container is the top of the stack
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testUnloadTopContainer() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		
+		inventoryOne.unloadContainer(containerTwo);
+	}
+	
+	/**
+	 * This should throw a CargoException as the container isn't at the top of the stack
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = CargoException.class)
+	public void testUnloadBottomContainer() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		
+		inventoryOne.unloadContainer(containerOne);
+	}
+	
+	/**
+	 * This should throw a IllegalArgumentException as we can't unload null
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testUnloadNullContainerThrowsExceptionOnInventoryWithCargo() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		inventoryOne.loadContainer(containerOne);
+		
+		inventoryOne.unloadContainer(null);
+	}
+	
+	/**
+	 * This should throw a IllegalArgumentException as we can't unload null
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testUnloadNullContainerThrowsExceptionOnInventoryWithoutCargo() throws LabelException, CargoException
+	{	
+		inventoryOne.unloadContainer(null);
+	}
+	
+	/**
+	 * This should throw a CargoException as the given containers are out of the range for our ship
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected=CargoException.class)
+	public void testRangeOfCargoInventory() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(10,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(10,1,1,2);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		
+		inventoryOne.unloadContainer(containerOne);
+	}
+	
+	/**
+	 * This will return the 2nd stack of the inventory in the form of an array
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testToArray() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
+		ContainerLabel containerThree = new ContainerLabel(1,1,1,3);
+		ContainerLabel containerToNotInclude = new ContainerLabel(2,1,1,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		inventoryOne.loadContainer(containerThree);
+		inventoryOne.loadContainer(containerToNotInclude);
+		
+		ContainerLabel[] arrayLabels = {containerOne, containerTwo, containerThree};
+		
+		assertArrayEquals(arrayLabels, inventoryOne.toArray(1));
+	}
+	
+	/**
+	 * This will test to see if the array returns properly and returns the objects in the right order
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test
+	public void testToArrayAndToString() throws LabelException, CargoException
+	{
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
+		ContainerLabel containerThree = new ContainerLabel(1,1,3,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
+		inventoryOne.loadContainer(containerThree);
+		
+		ContainerLabel[] arrayLabels = new ContainerLabel[3];
+		arrayLabels = inventoryOne.toArray(1);
+		
+		assertEquals("00100002", arrayLabels[1].toString());
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testToArrayThrowsIllegalArgumentExceptionWhenPassedNull() throws IllegalArgumentException, CargoException {
+		inventoryOne.toArray(null);
+	}
+
 }

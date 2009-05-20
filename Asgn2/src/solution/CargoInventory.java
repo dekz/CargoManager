@@ -23,9 +23,6 @@ public class CargoInventory {
 	 * currentContainers attribute to keep a count of how many containers on the
 	 * ship
 	 */
-
-	// TODO look into this whole maxContainers, is this a global weight
-	// allowance?
 	CargoInventory(Integer numStacks, Integer maxHeight, Integer maxContainers)
 			throws CargoException, IllegalArgumentException {
 		
@@ -57,14 +54,16 @@ public class CargoInventory {
 			throw new IllegalArgumentException();
 		}
 		
-		topContainer = storage.get(queryContainer.getKind()).get(
-				(storage.get(queryContainer.getKind()).size()) - 1);
-		
-		if (topContainer.equals(queryContainer)) {
-			return true;
-		} else {
-			return false;
-		}
+		try {
+			ArrayList<ContainerLabel> stack = storage.get(queryContainer.getKind());
+			topContainer = stack.get(stack.size() - 1);
+			
+			if (topContainer.equals(queryContainer)) {
+				return true;
+			}
+		} catch(IndexOutOfBoundsException e) {}
+
+		return false;
 	}
 
 	boolean isOnboard(ContainerLabel queryContainer)
@@ -79,33 +78,30 @@ public class CargoInventory {
 
 	void loadContainer(ContainerLabel newContainer) throws CargoException,
 			IllegalArgumentException {
-		// load the container on its stack based on its kind
-		// check its not already on the cargoship
-
-		if (newContainer.getKind() <= numStacks) {
-			// check we aren't going over our limits
-			if (storage.get(newContainer.getKind()).size() < maxHeight) {
-				if ((!isOnboard(newContainer)) && (currentContainers < maxContainers)) {
-
-					storage.get(newContainer.getKind()).add(newContainer);
-				}
-				currentContainers++;
-
-			} else {
-				throw new CargoException(
-						"Stack is too high or too many containers");
-			}
-		} else {
-			throw new CargoException("Kind is not within our range");
+		if(isOnboard(newContainer)) {
+			throw new CargoException("Container is already on board");
 		}
-
+		
+		if(newContainer.getKind() >= numStacks) {
+			throw new CargoException("Container kind can not be stacked on this ship");
+		}
+		
+		if(currentContainers >= maxContainers) {
+			throw new CargoException("The ship is full and can not hold anymore containers");
+		}
+		
+		storage.get(newContainer.getKind()).add(newContainer);
+		currentContainers++;
 	}
 
-	ContainerLabel[] toArray(int kind) throws CargoException,
-			IllegalArgumentException {
-
-		if (kind < 0) {
+	ContainerLabel[] toArray(Integer kind) throws CargoException,
+			IllegalArgumentException {		
+		if (kind == null) {
 			throw new IllegalArgumentException();
+		}
+		
+		if (kind < 0 || kind > numStacks) {
+			throw new CargoException("No such stack on this ship");
 		}
 		
 		ContainerLabel[] returnArray = new ContainerLabel[maxHeight];
