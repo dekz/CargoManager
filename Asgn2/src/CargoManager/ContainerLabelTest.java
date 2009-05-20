@@ -48,26 +48,26 @@ public class ContainerLabelTest {
 	@Test
 	public void testToString()
 	{
-		assertTrue(labelOne.toString().equals("00000001"));
+		assertEquals("00000001", labelOne.toString());
 	}
 	
 	@Test
 	public void testToStringTwo() throws LabelException
 	{
 		ContainerLabel labelTwo = new ContainerLabel(12,2,432,3);
-		assertTrue(labelTwo.toString().equals("01200432"));
+		assertEquals("01200432", labelTwo.toString());
 	}
 	
 	@Test(expected = LabelException.class)
-	public void illegalConstructorNegativeValues() throws LabelException
+	public void testIllegalConstructorNegativeValues() throws LabelException
 	{
-		ContainerLabel badLabel = new ContainerLabel(-1,-1,-1,-1);
+		new ContainerLabel(-1,-1,-1,-1);
 	}
 
 	@Test(expected = LabelException.class)
-	public void illegalConstructorBadRange() throws LabelException
+	public void testIllegalConstructorBadRange() throws LabelException
 	{
-		ContainerLabel badLabel = new ContainerLabel(0,7,1,5);
+		new ContainerLabel(0,7,1,5);
 	}
 	
 }

@@ -30,27 +30,24 @@ public class ContainerLabel {
 		this.identifierLength = a_identifierLength;
 
 	}
-	
-	int getIdentifier()
-	{
+
+	Integer getIdentifier() {
 		return this.identifier;
 	}
-	
-	int getKind()
-	{
+
+	Integer getKind() {
 		return this.kind;
 	}
-	
-	boolean matches(ContainerLabel a_label) throws IllegalArgumentException
-	{
+
+	boolean matches(ContainerLabel a_label) throws IllegalArgumentException {
 		if (a_label == null)
 			throw new IllegalArgumentException();
-		
-		if ((this.getKind() == a_label.getKind()) && (this.getIdentifier() == a_label.getIdentifier()))
-		{
+
+		if ((this.getKind() == a_label.getKind())
+				&& (this.getIdentifier() == a_label.getIdentifier()))
 			return true;
-		}
-		else return false;
+
+		return false;
 	}
 	
 	@Override public String toString()
