@@ -23,8 +23,9 @@ public class CargoInventory {
      * currentContainers attribute to keep a count of how many containers on the
      * ship
      */
-    CargoInventory(Integer numStacks, Integer maxHeight, Integer maxContainers)
-            throws CargoException, IllegalArgumentException {
+    public CargoInventory(Integer numStacks, Integer maxHeight,
+            Integer maxContainers) throws CargoException,
+            IllegalArgumentException {
 
         // No null parameters supported
         if ((numStacks == null) || (maxHeight == null)
@@ -48,7 +49,7 @@ public class CargoInventory {
         }
     }
 
-    boolean isAccessible(ContainerLabel queryContainer)
+    public boolean isAccessible(ContainerLabel queryContainer)
             throws IllegalArgumentException {
         ContainerLabel topContainer;
         // may get a null ?
@@ -69,7 +70,7 @@ public class CargoInventory {
         return false;
     }
 
-    boolean isOnboard(ContainerLabel queryContainer)
+    public boolean isOnboard(ContainerLabel queryContainer)
             throws IllegalArgumentException {
         if (queryContainer != null) {
             return storage.get(queryContainer.getKind()).contains(
@@ -79,8 +80,8 @@ public class CargoInventory {
         }
     }
 
-    void loadContainer(ContainerLabel newContainer) throws CargoException,
-            IllegalArgumentException {
+    public void loadContainer(ContainerLabel newContainer)
+            throws CargoException, IllegalArgumentException {
         if (newContainer == null) {
             throw new IllegalArgumentException("You can not load null");
         }
@@ -108,7 +109,7 @@ public class CargoInventory {
         currentContainers++;
     }
 
-    ContainerLabel[] toArray(Integer kind) throws CargoException,
+    public ContainerLabel[] toArray(Integer kind) throws CargoException,
             IllegalArgumentException {
         if (kind == null) {
             throw new IllegalArgumentException();
@@ -127,8 +128,8 @@ public class CargoInventory {
         }
     }
 
-    void unloadContainer(ContainerLabel oldContainer) throws CargoException,
-            IllegalArgumentException {
+    public void unloadContainer(ContainerLabel oldContainer)
+            throws CargoException, IllegalArgumentException {
         // check if the cargo is at the top of the stack
         if (oldContainer == null) {
             throw new IllegalArgumentException();

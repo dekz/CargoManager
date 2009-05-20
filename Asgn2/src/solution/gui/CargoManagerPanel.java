@@ -15,18 +15,34 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import solution.CargoException;
+import solution.CargoInventory;
+import solution.ContainerLabel;
+import solution.LabelException;
 
 /**
  * @author Bodaniel Jeanes and Jacob Evans
  */
 public class CargoManagerPanel extends JPanel implements ActionListener {
-    private JButton     loadBtn;
-    private JButton     unloadBtn;
-    private JTextArea   display;
-    private JScrollPane textScrollPane;
+    private JButton        loadBtn;
+    private JButton        unloadBtn;
+    private JTextArea      display;
+    private JScrollPane    textScrollPane;
+    private CargoInventory inventory;
 
     public CargoManagerPanel() {
         initialiseComponents();
+        try {
+            inventory = new CargoInventory(1, 1, 5);
+            inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
+        } catch (CargoException e) {
+            // error message
+        } catch (LabelException e) {
+
+        }
+        reDraw();
     }
 
     /*
@@ -34,7 +50,8 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
      * 
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
-    @Override
+
+    // @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
@@ -57,7 +74,6 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
      * 
      */
     private void loadContainer() {
-    // TODO Auto-generated method stub
 
     }
 
@@ -81,12 +97,12 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         loadBtn = new JButton("Load");
         loadBtn.addActionListener(this);
         loadBtn.setVisible(true);
-        addToPanel(loadBtn, constraints, 1, 10, 1, 1);
+        addToPanel(loadBtn, constraints, 0, 3, 1, 1);
 
         unloadBtn = new JButton("Unload");
         unloadBtn.addActionListener(this);
         unloadBtn.setVisible(true);
-        addToPanel(unloadBtn, constraints, 2, 10, 1, 1);
+        addToPanel(unloadBtn, constraints, 1, 3, 1, 1);
 
         repaint();
     }
@@ -102,26 +118,20 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         constraints.fill = GridBagConstraints.BOTH;
 
         // Text Area and Scroll Pane
-        display = new JTextArea();
+        display = new JTextArea(" ", 50, 50);
         display.setEditable(false);
         display.setLineWrap(true);
         display.setFont(new Font("Courier New", Font.PLAIN, 12));
         display.setBorder(BorderFactory.createEtchedBorder());
-
         textScrollPane = new JScrollPane(display);
-        addToPanel(textScrollPane, constraints, 1, 1, 1, 1);
+        addToPanel(display, constraints, 0, 0, 4, 1);
 
-        display = new JTextArea();
-        display.setEditable(true);
-        display.setLineWrap(false);
-        display.setFont(new Font("Arial", Font.BOLD, 12));
-        display.setBorder(BorderFactory.createEtchedBorder());
+        JTextField input = new JTextField();
 
-        constraints.weightx = 10;
-        constraints.weighty = 100;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.SOUTH;
 
-        addToPanel(display, constraints, 1, 1, 1, 1);
-
+        addToPanel(input, constraints, 0, 1, 4, 1);
         repaint();
     }
 
@@ -150,5 +160,41 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         constraints.gridwidth = w;
         constraints.gridheight = h;
         add(c, constraints);
+    }
+
+    void drawContainers(ContainerLabel[] labels) {
+        // ------------ //12 Dashes
+        // | 01200432 | //
+        // ------------
+        // i.toString()
+        // display.getColumns()
+        // display.getRows()
+        // display.insert(string, int pos)
+        // display.setColumns(int)
+        // display.append(string)
+        // display.setText(str)
+        display.setText("");
+        for (ContainerLabel containerLabel : labels) {
+            display.append("-----------\n| ");
+            display.append(containerLabel.toString());
+            display.append("\n-----------");
+        }
+    }
+
+    void reDraw() {
+        ContainerLabel[] localContainers;
+        int kind = 0;
+        while (true) {
+            try {
+                localContainers = inventory.toArray(kind);
+                drawContainers(localContainers);
+                kind++;
+                System.out.print("found a container");
+            } catch (CargoException e) {
+                // we reached the end of the stacks
+                return;
+            }
+
+        }
     }
 }
