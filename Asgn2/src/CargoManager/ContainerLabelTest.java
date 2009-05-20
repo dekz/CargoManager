@@ -1,6 +1,7 @@
 package CargoManager;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -94,7 +95,7 @@ public class ContainerLabelTest {
 	public void testMatchesReturnsFalseForDifferentObjectWithDifferentParameters() throws LabelException {
 		ContainerLabel labelTwo = new ContainerLabel(0,1,5,1);
 
-		assertTrue(!labelOne.matches(labelTwo));
-		assertTrue(!labelTwo.matches(labelOne));
+		assertFalse(labelOne.matches(labelTwo));
+		assertFalse(labelTwo.matches(labelOne));
 	}
 }
