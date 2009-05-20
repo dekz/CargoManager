@@ -1,4 +1,4 @@
-package CargoManager;
+package solution;
 
 public class LabelException extends Exception {
 	LabelException()

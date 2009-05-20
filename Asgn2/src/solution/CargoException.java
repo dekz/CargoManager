@@ -1,4 +1,4 @@
-package CargoManager;
+package solution;
 
 public class CargoException extends Exception {
 

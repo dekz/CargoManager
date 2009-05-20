@@ -1,4 +1,4 @@
-package CargoManager;
+package solution;
 
 /**
  * @author Jacob Evans, Bodaniel Jeanes

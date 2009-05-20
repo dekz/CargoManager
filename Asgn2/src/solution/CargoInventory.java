@@ -1,4 +1,4 @@
-package CargoManager;
+package solution;
 
 import java.util.ArrayList;
 
