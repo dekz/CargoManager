@@ -70,4 +70,29 @@ public class ContainerLabelTest {
 		new ContainerLabel(0,7,1,5);
 	}
 	
+	@Test(expected = IllegalArgumentException.class)
+	public void testMatchesThrowsIllegalArgumentExceptionWhenGivenNullParameter() {
+		labelOne.matches(null);
+	}
+	
+	@Test
+	public void testMatchesReturnsTrueForSameObject() {
+		assertTrue(labelOne.matches(labelOne));
+	}
+	
+	@Test
+	public void testMatchesReturnsTrueForDifferentObjectWithSameConstructorParameters() throws LabelException {
+		ContainerLabel labelTwo = new ContainerLabel(0,1,1,1);
+
+		assertTrue(labelOne.matches(labelTwo));
+		assertTrue(labelTwo.matches(labelOne));
+	}
+	
+	@Test
+	public void testMatchesReturnsFalseForDifferentObjectWithDifferentParameters() throws LabelException {
+		ContainerLabel labelTwo = new ContainerLabel(0,1,5,1);
+
+		assertTrue(!labelOne.matches(labelTwo));
+		assertTrue(!labelTwo.matches(labelOne));
+	}
 }
