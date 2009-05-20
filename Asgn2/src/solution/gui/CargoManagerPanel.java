@@ -38,6 +38,8 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         initialiseComponents();
         try {
             inventory = new CargoInventory(5, 5, 20);
+            currentContainer = new ContainerLabel(0,1,1,1);
+            inventory.loadContainer(currentContainer);
         } catch (Exception e) {
 
         }
@@ -152,7 +154,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         constraints.fill = GridBagConstraints.BOTH;
 
         // Text Area and Scroll Pane
-        display = new JTextArea(" ", 50, 50);
+        display = new JTextArea(" ", 100, 100);
         display.setEditable(false);
         display.setLineWrap(true);
         display.setFont(new Font("Courier New", Font.PLAIN, 12));
@@ -197,7 +199,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         add(c, constraints);
     }
 
-    void drawContainers(ContainerLabel[] labels) {
+    void drawContainers(ContainerLabel[] labels,int kind) {
     // ------------ //12 Dashes
     // | 01200432 | //
     // ------------
@@ -207,13 +209,18 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     // display.insert(string, int pos)
     // display.setColumns(int)
     // display.append(string)
-    // display.setText(str)
-    // display.setText("");
-    // for (ContainerLabel containerLabel : labels) {
-    // display.append("-----------\n| ");
-    // display.append(containerLabel.toString());
-    // display.append("\n-----------");
-    // }
+     for (ContainerLabel containerLabel : labels) {
+    	 if (containerLabel != null)
+    	 {
+    		 display.insert("-----------\n", kind);
+    		 //display.append(containerLabel.toString());
+    		//display.insert("8-----------", );
+    		 display.setRows(50);
+    		 display.setColumns(50);
+    		 display.append(containerLabel.toString());
+     		display.append("\n-----------\n");
+    	 }
+     }
     }
 
     void reDraw() {
@@ -222,11 +229,12 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         while (true) {
             try {
                 localContainers = inventory.toArray(kind);
-                drawContainers(localContainers);
+                drawContainers(localContainers, kind);
                 kind++;
                 System.out.println("found a container");
             } catch (CargoException e) {
                 // we reached the end of the stacks
+            	System.out.println("ran out of containers bailing");
                 return;
             }
 
