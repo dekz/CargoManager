@@ -61,9 +61,14 @@ public class CargoInventoryTest {
 	}
 	
 	
-	// loadContainer() tests	
+	// loadContainer() tests
+	@Test(expected=IllegalArgumentException.class)
+	public void testLoadContainerWithNullThrowsIllegalArgumentException() throws IllegalArgumentException, CargoException {
+		inventoryOne.loadContainer(null);
+	}
+	
 	@Test
-	public void testAdddingContainer() throws LabelException, CargoException
+	public void testLoadContainerWithNormalContainer() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
 		inventoryOne.loadContainer(containerOne);
@@ -307,28 +312,19 @@ public class CargoInventoryTest {
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected=IllegalArgumentException.class)
 	public void testUnloadNullContainerThrowsExceptionOnInventoryWithoutCargo() throws LabelException, CargoException
 	{	
 		inventoryOne.unloadContainer(null);
 	}
 	
-	/**
-	 * This should throw a CargoException as the given containers are out of the range for our ship
-	 * @throws LabelException
-	 * @throws CargoException
-	 */
 	@Test(expected=CargoException.class)
-	public void testRangeOfCargoInventory() throws LabelException, CargoException
-	{
-		ContainerLabel containerOne = new ContainerLabel(10,1,1,1);
-		ContainerLabel containerTwo = new ContainerLabel(10,1,1,2);
-		
-		inventoryOne.loadContainer(containerOne);
-		inventoryOne.loadContainer(containerTwo);
-		
+	public void testUnloadThrowsExceptionWhenContainerIsNotOnShip() throws IllegalArgumentException, LabelException, CargoException {
+		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);		
 		inventoryOne.unloadContainer(containerOne);
 	}
+	
+	// toArray() tests
 	
 	/**
 	 * This will return the 2nd stack of the inventory in the form of an array

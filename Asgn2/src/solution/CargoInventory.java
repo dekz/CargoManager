@@ -78,6 +78,10 @@ public class CargoInventory {
 
 	void loadContainer(ContainerLabel newContainer) throws CargoException,
 			IllegalArgumentException {
+		if(newContainer == null) {
+			throw new IllegalArgumentException("You can not load null");
+		}
+		
 		if(isOnboard(newContainer)) {
 			throw new CargoException("Container is already on board");
 		}
@@ -90,6 +94,10 @@ public class CargoInventory {
 			throw new CargoException("The ship is full and can not hold anymore containers");
 		}
 		
+		if(storage.get(newContainer.getKind()).size() >= maxHeight){
+			throw new CargoException("The stack for this container kind is already at the maximum height");
+		}
+		
 		storage.get(newContainer.getKind()).add(newContainer);
 		currentContainers++;
 	}
@@ -100,7 +108,7 @@ public class CargoInventory {
 			throw new IllegalArgumentException();
 		}
 		
-		if (kind < 0 || kind > numStacks) {
+		if (kind < 0 || kind >= numStacks) {
 			throw new CargoException("No such stack on this ship");
 		}
 		
@@ -128,6 +136,8 @@ public class CargoInventory {
 			} else {
 				throw new CargoException("Cannot access the container");
 			}
+		} else {
+			throw new CargoException("Container is not on the ship");
 		}
 	}
 }
