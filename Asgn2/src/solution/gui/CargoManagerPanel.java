@@ -127,7 +127,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         addToPanel(display, constraints, 0, 0, 4, 1);
 
         JTextField input = new JTextField();
-
+        constraints.weighty = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.SOUTH;
 
