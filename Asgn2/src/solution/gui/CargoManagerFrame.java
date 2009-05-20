@@ -18,7 +18,7 @@ public class CargoManagerFrame extends JFrame {
 
     public CargoManagerFrame() {
         // Initialise the Frame and add the GamePanel
-        setTitle("CargoManager");
+        setTitle("Cargo Manager");
         setSize(PREFSIZE);
 
         getContentPane().add(new CargoManagerPanel());
