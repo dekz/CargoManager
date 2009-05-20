@@ -26,8 +26,10 @@ public class CargoInventory {
 
 	// TODO look into this whole maxContainers, is this a global weight
 	// allowance?
-	CargoInventory(int numStacks, int maxHeight, int maxContainers)
+	CargoInventory(Integer numStacks, Integer maxHeight, Integer maxContainers)
 			throws CargoException, IllegalArgumentException {
+		if(numStacks == null || maxHeight == null || maxContainers == null)
+			throw new IllegalArgumentException("Cannot have null values for any parameter");
 		if ((numStacks < 0) || (maxHeight < 0) || (maxContainers < 0))
 			throw new CargoException("Cannot have negative values");
 		this.numStacks = numStacks;

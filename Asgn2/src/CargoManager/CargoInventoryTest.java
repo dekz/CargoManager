@@ -3,10 +3,14 @@
  */
 package CargoManager;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * @author Jacob Evans, Bodaniel Jeanes
@@ -24,8 +28,23 @@ public class CargoInventoryTest {
 		inventoryOne = new CargoInventory(3,3,10);
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenFirstParameterIsNull() throws CargoException {
+		new CargoInventory(null, 1, 1);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenSecondParameterIsNull() throws CargoException {
+		new CargoInventory(1, null, 1);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorThrowsIllegalArgumentExceptionWhenThirdParameterIsNull() throws CargoException {
+		new CargoInventory(1, 1, null);
+	}
+	
 	@Test
-	public void addContainer() throws LabelException, CargoException
+	public void testAdddingContainer() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
 		inventoryOne.loadContainer(containerOne);
@@ -86,14 +105,16 @@ public class CargoInventoryTest {
 	public void testIsAccessibleTwoCargo() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
 		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
+		
+		inventoryOne.loadContainer(containerOne);
 		inventoryOne.loadContainer(containerTwo);
+		
 		assertFalse(inventoryOne.isAccessible(containerOne));
 	}
 	
 	/**
-	 * This should return true as the container is the top of the stack
+	 * This should not throw any exceptions as the container is the top of the stack
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
@@ -101,14 +122,16 @@ public class CargoInventoryTest {
 	public void testUnloadTopContainer() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
 		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
+		
+		inventoryOne.loadContainer(containerOne);
 		inventoryOne.loadContainer(containerTwo);
+		
 		inventoryOne.unloadContainer(containerTwo);
 	}
 	
 	/**
-	 * This should return false as the container isn't at the top of the stack
+	 * This should throw a CargoException as the container isn't at the top of the stack
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
@@ -116,28 +139,41 @@ public class CargoInventoryTest {
 	public void testUnloadBottomContainer() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
 		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
+		
+		inventoryOne.loadContainer(containerOne);
 		inventoryOne.loadContainer(containerTwo);
+		
 		inventoryOne.unloadContainer(containerOne);
 	}
 	
 	/**
-	 * This should return false as the container isn't at the top of the stack
+	 * This should throw a IllegalArgumentException as we can't unload null
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
 	@Test(expected = IllegalArgumentException.class)
-	public void testUnloadNullContainer() throws LabelException, CargoException
+	public void testUnloadNullContainerThrowsExceptionOnInventoryWithCargo() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
 		inventoryOne.loadContainer(containerOne);
-		ContainerLabel containerTwo = null;
-		inventoryOne.unloadContainer(containerTwo);
+		
+		inventoryOne.unloadContainer(null);
 	}
 	
 	/**
-	 * This should throw an exception as the given containers are out of the range for our ship
+	 * This should throw a IllegalArgumentException as we can't unload null
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testUnloadNullContainerThrowsExceptionOnInventoryWithoutCargo() throws LabelException, CargoException
+	{	
+		inventoryOne.unloadContainer(null);
+	}
+	
+	/**
+	 * This should throw a CargoException as the given containers are out of the range for our ship
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
@@ -145,9 +181,11 @@ public class CargoInventoryTest {
 	public void testRangeOfCargoInventory() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(10,1,1,1);
-		inventoryOne.loadContainer(containerOne);
 		ContainerLabel containerTwo = new ContainerLabel(10,1,1,2);
+		
+		inventoryOne.loadContainer(containerOne);
 		inventoryOne.loadContainer(containerTwo);
+		
 		inventoryOne.unloadContainer(containerOne);
 	}
 	
@@ -160,13 +198,18 @@ public class CargoInventoryTest {
 	public void testToArray() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
 		ContainerLabel containerTwo = new ContainerLabel(1,1,1,2);
-		inventoryOne.loadContainer(containerTwo);
 		ContainerLabel containerThree = new ContainerLabel(1,1,1,3);
+		ContainerLabel containerToNotInclude = new ContainerLabel(2,1,1,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
 		inventoryOne.loadContainer(containerThree);
-		ContainerLabel[] arrayLabels = new ContainerLabel[3];
-		arrayLabels = inventoryOne.toArray(1);
+		inventoryOne.loadContainer(containerToNotInclude);
+		
+		ContainerLabel[] arrayLabels = {containerOne, containerTwo, containerThree};
+		
+		assertArrayEquals(arrayLabels, inventoryOne.toArray(1));
 	}
 	
 	/**
@@ -178,33 +221,94 @@ public class CargoInventoryTest {
 	public void testToArrayAndToString() throws LabelException, CargoException
 	{
 		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryOne.loadContainer(containerOne);
 		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
-		inventoryOne.loadContainer(containerTwo);
 		ContainerLabel containerThree = new ContainerLabel(1,1,3,1);
+		
+		inventoryOne.loadContainer(containerOne);
+		inventoryOne.loadContainer(containerTwo);
 		inventoryOne.loadContainer(containerThree);
+		
 		ContainerLabel[] arrayLabels = new ContainerLabel[3];
 		arrayLabels = inventoryOne.toArray(1);
-		assertEquals(arrayLabels[1].toString(),"00100002");
+		
+		assertEquals("00100002", arrayLabels[1].toString());
 	}
 	
 	/**
-	 * This will test to see if an exception is thrown if there are too many containers
+	 * This will test to see if an exception is thrown if there are too many kinds of containers for the ship
 	 * @throws LabelException
 	 * @throws CargoException
 	 */
 	@Test(expected = CargoException.class)
-	public void testTooManyContainers() throws LabelException, CargoException
+	public void testTooManyContainersForShip() throws LabelException, CargoException
 	{
-		CargoInventory inventoryTwo = new CargoInventory(2,1,1);
-		ContainerLabel containerOne = new ContainerLabel(1,1,1,1);
-		inventoryTwo.loadContainer(containerOne);
-		ContainerLabel containerTwo = new ContainerLabel(1,1,2,1);
-		inventoryTwo.loadContainer(containerTwo);
+		CargoInventory inventoryTwo   = new CargoInventory(100, 100, 2);
+		
+		// 3 containers regardless of kind for a ship that can only hold 2
+		ContainerLabel containerOne   = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo   = new ContainerLabel(1,1,2,1);
 		ContainerLabel containerThree = new ContainerLabel(1,1,3,1);
-		inventoryTwo.loadContainer(containerThree);
+		
+		try {
+			inventoryTwo.loadContainer(containerOne);
+			inventoryTwo.loadContainer(containerTwo);
+		} catch(CargoException e) {
+			fail("CargoException thrown too early");
+		}
 
+		// This call should raise an exception as only 2 containers are allowed on the ship
+		inventoryTwo.loadContainer(containerThree);
 	}
 	
-
+	/**
+	 * This will test to see if an exception is thrown if there are too many containers for a stack of a certain kind
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = CargoException.class)
+	public void testTooManyContainersForStack() throws LabelException, CargoException
+	{
+		CargoInventory inventoryTwo   = new CargoInventory(100,2,100);
+		
+		// 3 containers of the same kind (so will be in the same stack)
+		ContainerLabel containerOne   = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo   = new ContainerLabel(1,1,2,1);
+		ContainerLabel containerThree = new ContainerLabel(1,1,3,1);
+		
+		try {
+			inventoryTwo.loadContainer(containerOne);
+			inventoryTwo.loadContainer(containerTwo);
+		} catch(CargoException e) {
+			fail("CargoException thrown too early");
+		}
+		
+		// This call should raise an exception as the stack height is only 2
+		inventoryTwo.loadContainer(containerThree); 
+	}
+	
+	/**
+	 * This will test to see if an exception is thrown if there are too many kinds of containers for a ship
+	 * @throws LabelException
+	 * @throws CargoException
+	 */
+	@Test(expected = CargoException.class)
+	public void testTooManyContainersForNumberOfStackKinds() throws LabelException, CargoException
+	{
+		CargoInventory inventoryTwo   = new CargoInventory(2,100,100);
+		
+		// Three different kinds of containers
+		ContainerLabel containerOne   = new ContainerLabel(1,1,1,1);
+		ContainerLabel containerTwo   = new ContainerLabel(2,1,1,1);
+		ContainerLabel containerThree = new ContainerLabel(3,1,1,1);
+		
+		try {
+			inventoryTwo.loadContainer(containerOne);
+			inventoryTwo.loadContainer(containerTwo);
+		} catch(CargoException e) {
+			fail("CargoException thrown too early");
+		}
+		
+		// This call should raise an exception as their is only room for two stacks
+		inventoryTwo.loadContainer(containerThree); 
+	}
 }
