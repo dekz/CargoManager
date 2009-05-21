@@ -31,8 +31,9 @@ import solution.LabelException;
 public class CargoManagerPanel extends JPanel implements ActionListener {
     private JButton              loadBtn;
     private JButton              unloadBtn;
+    private JButton				 createBtn, topViewBtn, sideViewBtn;
     private JTextArea            display;
-    private JTextField           input;
+    private JTextField           input, numStacksInput, maxHeightInput, maxContainersInput;
     private final CargoInventory inventory;
     private ContainerLabel       currentContainer;
 
@@ -136,6 +137,24 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		unloadBtn.addActionListener(this);
 		unloadBtn.setVisible(true);
 		addToPanel(unloadBtn, constraints, 1, 3, 1, 1);
+		
+		createBtn = new JButton("Create");
+		createBtn.addActionListener(this);
+		createBtn.setVisible(true);
+		addToPanel(createBtn, constraints, 3, 5, 1, 1);
+		
+		topViewBtn = new JButton("Top View");
+		topViewBtn.addActionListener(this);
+		topViewBtn.setVisible(true);
+		addToPanel(topViewBtn, constraints, 3, 8, 1, 1);
+		
+		sideViewBtn = new JButton("Side View");
+		sideViewBtn.addActionListener(this);
+		sideViewBtn.setVisible(true);
+		constraints.anchor = GridBagConstraints.EAST;
+		addToPanel(sideViewBtn, constraints, 3, 7, 1, 1);
+		
+		
 
 		repaint();
 	}
@@ -156,7 +175,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		display.setLineWrap(false);
 		display.setFont(new Font("Courier New", Font.PLAIN, 12));
 		display.setBorder(BorderFactory.createEtchedBorder());
-		addToPanel(display, constraints, 0, 0, 4, 1);
+		addToPanel(display, constraints, 0, 1, 4, 1);
 
 		// input field
 		input = new JTextField();
@@ -164,7 +183,35 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		constraints.weighty = 1;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.anchor = GridBagConstraints.SOUTH;
-		addToPanel(input, constraints, 0, 1, 4, 1);
+		addToPanel(input, constraints, 0, 2, 4, 1);
+		
+		constraints = new GridBagConstraints();
+		
+		//numStacks input field
+		numStacksInput = new JTextField();
+		numStacksInput.addActionListener(this);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.LAST_LINE_START;
+		numStacksInput.setText("Stack Count");
+		addToPanel(numStacksInput, constraints, 0, 5, 1, 1);
+		
+		maxHeightInput = new JTextField();
+		maxHeightInput.addActionListener(this);
+		constraints.weightx = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.LAST_LINE_START;
+		maxHeightInput.setText("Max Height");
+		addToPanel(maxHeightInput, constraints, 1, 5, 1, 1);
+
+		maxContainersInput = new JTextField();
+		maxContainersInput.addActionListener(this);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.LAST_LINE_START;
+		maxContainersInput.setText("Max Containers");
+		addToPanel(maxContainersInput, constraints, 2, 5, 1, 1);
+
+
+		
 
 		repaint();
 	}
