@@ -179,7 +179,8 @@ public class CargoViewer {
             clear();
             ArrayList<ArrayList<String>> drawArray = getData();
             int maxStack = 0;
-            int currentStack = 0;
+            int currentRow = 0;
+            
             //find the highest stack
             for (ArrayList<String> arrayList : drawArray) {
 				if (arrayList.size() > maxStack)
@@ -189,17 +190,26 @@ public class CargoViewer {
 			}
             
             //we are drawing topdown
-            currentStack = maxStack;
-           // System.out.print(drawArray.get(0).get(0));
-            for (ArrayList<String> arrayList2 : drawArray) {
-            	if (arrayList2.size() >= currentStack)
+            currentRow = maxStack-1;
+           for (int j = maxStack-1; j < 0; j--) {
+			
+        	   for (int i = 0; i < drawArray.size(); i++) {
+        		  //draw the top most element
+				
+			}
+           }
+            
+           
+           /*for (int i = 0; i < drawArray.size(); i++) {
+            	if (drawArray.get(i).size() != 0)
             	{
-            		//draw it
-            		write(arrayList2.get(currentStack-1));
-            	} else {
-            		//draw empty boxes
-            		write("            ");
+            		 write("| ");
+            		 write(drawArray.get(i).get(0));
+            	}else {
+            		write("EMPTY");
             	}
+            	//write(drawArray.get(i).get(0));*/
+				
 			}
             
         }
@@ -211,19 +221,21 @@ public class CargoViewer {
         	ContainerLabel[] localLabels;
         	int kind = 0;
         	try {
-        		ArrayList<String> localDump = new ArrayList<String>();
         		
         		while (true) {
-        			
-        			localLabels = inventory.toArray(kind);
-        			for (ContainerLabel i : localLabels) {
-        				localDump.add(i.toString());
-        				System.out.print("added: " + i.toString());
+            		ArrayList<String> localDump = new ArrayList<String>();
+                    localLabels = inventory.toArray(kind);
+                    
+                    for (ContainerLabel containerLabel : localLabels) {
+						if (containerLabel != null) {
+                    	 localDump.add(containerLabel.toString());
+						}
 					}
-        			
-        			drawArray.add(localDump);
-        			kind++;
-        		}
+                    
+                    System.out.println(kind + ": " + localDump.size());
+                    drawArray.add(localDump);
+                    kind++;
+                }
         		
         	} catch (CargoException e) {
         		//end of the stack
