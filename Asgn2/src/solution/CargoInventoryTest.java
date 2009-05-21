@@ -88,12 +88,12 @@ public class CargoInventoryTest {
     public void testLoadContainerThrowsCargoExceptionWhenSameContainerObjectIsAddedTwice()
             throws IllegalArgumentException, LabelException, CargoException {
         ContainerLabel container = new ContainerLabel(100, 3, 1, 1);
-        /*try {
+        try {
             inventory.loadContainer(container);
         } catch (CargoException e) {
             fail("CargoException thrown too early");
         }
-*/
+
         // this call should throw the exception
         inventory.loadContainer(container);
     }
@@ -105,11 +105,11 @@ public class CargoInventoryTest {
         // create two DIFFERENT objects with SAME parameters
         ContainerLabel container1 = new ContainerLabel(100, 3, 1, 1);
         ContainerLabel container2 = new ContainerLabel(100, 3, 1, 1);
-        /*try {
+        try {
             inventory.loadContainer(container1);
         } catch (CargoException e) {
             fail("CargoException thrown too early");
-        }*/
+        }
 
         // this call should throw the exception
         inventory.loadContainer(container2);
