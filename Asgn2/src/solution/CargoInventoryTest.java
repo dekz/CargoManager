@@ -118,6 +118,26 @@ public class CargoInventoryTest {
         inventory.loadContainer(container2);
     }
 
+    @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelIsAddedTwiceButNotConsecutively()
+            throws IllegalArgumentException, LabelException, CargoException {
+        // create two DIFFERENT objects with SAME parameters
+
+        ContainerLabel container1 = new ContainerLabel(1, 1, 1, 1);
+        ContainerLabel container2 = new ContainerLabel(1, 1, 2, 1);
+        ContainerLabel container3 = new ContainerLabel(1, 1, 1, 1);
+
+        try {
+            inventory.loadContainer(container1);
+            inventory.loadContainer(container2);
+        } catch (CargoException e) {
+            fail("CargoException thrown too early: " + e.getMessage());
+        }
+
+        // this call should throw the exception
+        inventory.loadContainer(container3);
+    }
+
     /**
      * This will test to see if an exception is thrown if there are too many
      * kinds of containers for the ship
