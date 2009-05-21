@@ -32,7 +32,7 @@ public class CargoViewer {
 	public void draw() {
 		if (type == TYPE.SIDE) {
 			System.out.println("Displaying Side View");
-			sideView.draw();
+			sideView.getData();
 		} else if (type == TYPE.TOP) {
 			System.out.println("Displaying Top View");
 			topView.draw();
@@ -175,9 +175,9 @@ public class CargoViewer {
 			super(inventory, display);
 		}
 
-		public void draw() {
+		public void draw(ArrayList<ArrayList<String>> passedArray) {
             clear();
-            ArrayList<ArrayList<String>> drawArray = getData();
+            ArrayList<ArrayList<String>> drawArray = passedArray;
             int maxStack = 0;
             int currentRow = 0;
             
@@ -191,20 +191,22 @@ public class CargoViewer {
             
             // we are drawing topdown
             currentRow = maxStack-1;
+            
+            System.out.print(drawArray.get(0).get(0));
             //draw the top most strings if there are some, then move on through
-           // for (int i = maxStack; i == 0; i--) {
+           for (int i = maxStack; i == 0; i--) {
             	
-            	/*//go through each one and draw the top most
+            	//go through each one and draw the top most
             	for (int j = 0; j < drawArray.size(); j++) {
             		//if we have something to draw then draw it
 					if (!(drawArray.get(j).size() < i)) { 
 						write(drawArray.get(i).get(j));
 						
-					}*/
+					}
             		
 				
-				
-			//}
+            	}
+			}
            
 				
         	   
@@ -221,21 +223,28 @@ public class CargoViewer {
 					ArrayList<String> localDump = new ArrayList<String>();
 					localLabels = inventory.toArray(kind);
 
-					for (ContainerLabel containerLabel : localLabels) {
+				/*	for (ContainerLabel containerLabel : localLabels) {
 						if (containerLabel != null) {
 							localDump.add(containerLabel.toString());
 						}
+					}*/
+					
+					for (int i = 0; i < localLabels.length; i++) {
+						if (localLabels[i] != null) {
+							localDump.add(localLabels[i].toString());
+						}
 					}
-
-					System.out.println(kind + ": " + localDump.size());
+					
 					drawArray.add(localDump);
 					kind++;
 				}
 
 			} catch (CargoException e) {
-				// end of the stack
+				System.out.println(drawArray.get(0).get(0));
+				draw(drawArray);
 
-			} finally {
+			} finally
+			{
 				return drawArray;
 			}
 		}
