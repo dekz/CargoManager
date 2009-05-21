@@ -59,7 +59,7 @@ public class CargoViewer {
         }
 
         protected void clear() {
-            display.setText(" ");
+            display.setText("");
         }
 
         protected void newLine() {
