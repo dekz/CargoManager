@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,8 @@ import javax.swing.JTextField;
 import solution.CargoException;
 import solution.CargoInventory;
 import solution.ContainerLabel;
+
+import java.util.ArrayList;
 
 /**
  * @author Bodaniel Jeanes and Jacob Evans
@@ -37,6 +40,14 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     public CargoManagerPanel() throws IllegalArgumentException, CargoException {
         initialiseComponents();
         inventory = new CargoInventory(5, 5, 20);
+        /* = new ContainerLabel(0,1,1,1);
+        currentContainer = new ContainerLabel(1,1,1,1);*/
+        inventory.loadContainer(new ContainerLabel(0,1,1,1));
+        inventory.loadContainer(new ContainerLabel(1,1,1,1));
+        inventory.loadContainer(new ContainerLabel(2,1,1,1));
+        inventory.loadContainer(new ContainerLabel(3,1,1,1));
+        inventory.loadContainer(new ContainerLabel(4,1,1,1));
+        reDraw();
     }
 
     /*
@@ -133,9 +144,9 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         constraints.fill = GridBagConstraints.BOTH;
 
         // Text Area and Scroll Pane
-        display = new JTextArea(" ", 50, 50);
+        display = new JTextArea(" ", 100, 100);
         display.setEditable(false);
-        display.setLineWrap(true);
+        display.setLineWrap(false);
         display.setFont(new Font("Courier New", Font.PLAIN, 12));
         display.setBorder(BorderFactory.createEtchedBorder());
         addToPanel(display, constraints, 0, 0, 4, 1);
@@ -178,38 +189,171 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         add(c, constraints);
     }
 
-    void drawContainers(ContainerLabel[] labels) {
-        // ------------ //12 Dashes
-        // | 01200432 | //
-        // ------------
-        // i.toString()
-        // display.getColumns()
-        // display.getRows()
-        // display.insert(string, int pos)
-        // display.setColumns(int)
-        // display.append(string)
-        // display.setText(str)
-        // display.setText("");
-        for (ContainerLabel containerLabel : labels) {
-            display.append("-----------\n| ");
-            display.append(containerLabel.toString());
-            display.append("\n-----------");
-        }
+    ArrayList<String> drawContainers(ContainerLabel[] containerLabels, int kind) {
+    // ------------ //12 Dashes
+    // | 01200432 | //
+    // ------------
+    // i.toString()
+    // display.getColumns()
+    // display.getRows()
+    // display.insert(string, int pos)
+    // display.setColumns(int)
+    // display.append(string)
+    //int asciiBoxWidth = 12;
+     /*for (ContainerLabel containerLabel : labels) {
+    	 if (containerLabel != null)
+    	 {
+    		
+			 display.append("------------");
+    		 display.append("\n| ");
+    		 display.append(containerLabel.toString());
+    		 display.append(" |\n");
+    		 display.append("------------");
+    		 
+    		 //display.insert("8", 11);
+    		// display.append(containerLabel.toString());
+     		//display.append("\n-----------\n");
+    	 }
+     }*/
+    	
+	    ArrayList<String> stack = new ArrayList<String>();
+	    
+	    if (containerLabels.length > 0) {
+		    stack.add("----------");
+		    
+		    for (ContainerLabel label : containerLabels) {
+		    	if (label != null) {
+					stack.add(" " + label.toString() + " ");
+					stack.add("----------");
+		    	}
+			}
+	    } else {
+	    	stack.add("          ");
+	    }
+	    
+	    return stack;
+    	
     }
+    
+    
 
     void reDraw() {
         ContainerLabel[] localContainers;
         int kind = 0;
+        int previousStackCount = 0;
+        int maxLineCount = 0;
+        ArrayList<String> viewLines = new ArrayList<String>();
+        viewLines.add("");
         while (true) {
             try {
                 localContainers = inventory.toArray(kind);
-                drawContainers(localContainers);
+                ArrayList<String> stackStrings = drawContainers(localContainers, kind);
+                
+                if ((localContainers.length > 0) && (previousStackCount > 0)) {
+                	ArrayList<String> divider = new ArrayList<String>();
+                	divider.add("-");
+                	for (int i = 0; i < Math.max(previousStackCount, localContainers.length); i++) {
+						divider.add("|");
+						divider.add("-");
+					}
+                	mergeArrayLists(viewLines, divider);
+                } else {
+                	ArrayList<String> emptyDivider = new ArrayList<String>();
+                	emptyDivider.add(" ");
+                	mergeArrayLists(viewLines, emptyDivider);
+                }
+                
+                if (localContainers.length > 0) {
+                	mergeArrayLists(viewLines, stackStrings);
+                } else {
+                	ArrayList<String> emptyLine = new ArrayList<String>();
+                	emptyLine.add("          ");
+                	mergeArrayLists(viewLines, emptyLine);
+                }
+                
+                previousStackCount = localContainers.length;
+                
+                if (numberOfRows(localContainers.length) > maxLineCount) {
+                	maxLineCount = numberOfRows(localContainers.length);
+                }
+                
                 kind++;
                 System.out.println("found a container");
-            } catch (Exception e) {
+            } catch (CargoException e) {
                 // we reached the end of the stacks
+            	
+            	if (previousStackCount > 0) {
+                	ArrayList<String> divider = new ArrayList<String>();
+                	divider.add("-\n");
+                	for (int i = 0; i < previousStackCount; i++) {
+						divider.add("|\n");
+						divider.add("-\n");
+					}
+                	mergeArrayLists(viewLines, divider);
+                } else {
+                	ArrayList<String> emptyDivider = new ArrayList<String>();
+                	emptyDivider.add(" \n");
+                	mergeArrayLists(viewLines, emptyDivider);
+                }
+            	
+            	for (String line : viewLines) {
+					display.append(line);
+				}
+            	
+            	System.out.println("ran out of containers bailing");
                 return;
             }
+           
         }
+        //"---------
+        
+    }
+    
+    int numberOfRows(int containers) {
+    	if (containers != 0) {
+    		return 0;
+    	} else {
+    		return 2 + containers * 3;
+    	}
+    }
+    
+    ArrayList<String> mergeArrayLists(ArrayList<String> originalList, ArrayList<String> newList) {
+    	ArrayList<String> returnArrayList = new ArrayList<String>();
+    	int height = Math.max(originalList.size(), newList.size());
+    	int originalListWidth = originalList.get(0).length();
+    	int newListWidth = newList.get(0).length();
+    	
+        for (int i = 0; i < height; i++) {
+        	String originalString;
+        	String newString;
+        	
+        	if (originalList.size() > (height - 1)) {
+        		char[] spaces = new char[originalListWidth];
+        		
+        		for (int j = 0; j < originalListWidth; j++) {
+					spaces[j] = ' ';
+				}
+        		
+        		originalString = new String(spaces);
+        	} else {
+        		originalString = originalList.get(i);
+        	}
+        	
+        	if (newList.size() > height - 1) {
+        		char[] spaces = new char[newListWidth];
+        		
+        		for (int j = 0; j < newListWidth; j++) {
+					spaces[j] = ' ';
+				}
+        		
+        		newString = new String(spaces);
+        	} else {
+        		newString = originalList.get(i);
+        	}
+        	
+			returnArrayList.add(originalString + newString);
+		}
+    	
+    	return returnArrayList;
     }
 }
