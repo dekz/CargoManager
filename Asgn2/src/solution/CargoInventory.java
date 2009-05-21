@@ -13,7 +13,8 @@ public class CargoInventory {
     public CargoInventory(Integer numStacks, Integer maxHeight,
             Integer maxContainers) throws CargoException,
             IllegalArgumentException {
-
+    
+    	
         // No null parameters supported
         if ((numStacks == null) || (maxHeight == null)
                 || (maxContainers == null)) {
@@ -26,6 +27,7 @@ public class CargoInventory {
             throw new CargoException("Cannot have negative values");
         }
 
+        
         this.numStacks = numStacks;
         this.maxHeight = maxHeight;
         this.maxContainers = maxContainers;
@@ -59,9 +61,9 @@ public class CargoInventory {
 
     public boolean isOnboard(ContainerLabel queryContainer)
             throws IllegalArgumentException {
-        if (queryContainer != null) {
-            return storage.get(queryContainer.getKind()).contains(
-                    queryContainer);
+       if (queryContainer != null) {
+            //go through the array check if we have the item in the list
+    	   return true;
         } else {
             throw new IllegalArgumentException();
         }

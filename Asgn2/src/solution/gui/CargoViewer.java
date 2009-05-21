@@ -142,7 +142,6 @@ public class CargoViewer {
                                 	break;
                                 }
                             }
-                            System.out.println(objectCount);
                             // add our top container
                             localArrayListDump.set(0, stack[objectCount - 1]
                                     .toString());
