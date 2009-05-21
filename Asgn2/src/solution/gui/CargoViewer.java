@@ -60,7 +60,58 @@ public class CargoViewer {
             super(inventory, display);
         }
 
+        /**
+         * 
+         */
         public void draw() {
+            ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
+            int kind = 0;
+            ContainerLabel[] localStack;
+
+            // An array list which will write the containerlabel(top one) to the
+            // first index, and a string which will represent an int to be the
+            // count
+
+            try {
+                while (true) {
+                    localStack = inventory.toArray(kind);
+                    if (localStack.length > 0) {
+                        if (localStack[0] != null) {
+                            // need to catch empty stacks
+                            ArrayList<String> localArrayListDump = new ArrayList<String>();
+                            int objectCount = 0;
+                            // find out how many objects we have so we don't hit
+                            // some NUllPointers
+                            while (localStack[objectCount] != null) {
+                                objectCount++;
+                            }
+                            // add our top container
+                            localArrayListDump.add(localStack[objectCount - 1]
+                                    .toString());
+                            // add our count of containers
+                            localArrayListDump.add(Integer
+                                    .toString(objectCount));
+
+                            drawArray.add(localArrayListDump);
+
+                        } else {
+                            // if the all the containers have been unloaded and
+                            // there are spaces
+                            ArrayList<String> localArrayListDump = new ArrayList<String>();
+                            localArrayListDump.add("        ");
+                            localArrayListDump.add("0");
+                            drawArray.add(localArrayListDump);
+                        }
+
+                        kind++;
+                    }
+                }
+            } catch (CargoException e) {
+                // catches when we run out of stacks
+                drawTopViewHelper(drawArray);
+            } catch (Exception e) {
+                // message("Drawing error: " + e);
+            }
 
         }
     }
