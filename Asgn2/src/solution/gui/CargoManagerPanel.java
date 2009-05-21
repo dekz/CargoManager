@@ -43,8 +43,10 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         initialiseComponents();
 
         createInventory(6, 6, 20);
+        
+        ContainerLabel test = new ContainerLabel(4, 1, 5, 1); 
 
-        inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
+       // inventory.loadContainer(new ContainerLabel(0,1,1,1));
         inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(3, 1, 1, 1));
@@ -52,7 +54,9 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         inventory.loadContainer(new ContainerLabel(4, 1, 2, 1));
         inventory.loadContainer(new ContainerLabel(4, 1, 3, 1));
         inventory.loadContainer(new ContainerLabel(4, 1, 4, 1));
-        inventory.loadContainer(new ContainerLabel(4, 1, 5, 1));
+        inventory.loadContainer(test);
+        
+        inventory.unloadContainer(test);
 //        inventory.loadContainer(new ContainerLabel(5, 1, 5, 1));
 
 

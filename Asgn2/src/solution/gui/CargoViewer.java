@@ -172,7 +172,7 @@ public class CargoViewer {
             // we are drawing topdown
             currentRow = maxStack;
 
-            System.out.print(drawArray.get(0).get(0));
+            System.out.print(drawArray.get(1).get(0));
             // draw the top most strings if there are some, then move on through
 
             for (int i = currentRow; i >= 0; i--) {
@@ -189,7 +189,7 @@ public class CargoViewer {
                         write(" ");
                     } else {
                         // draw spaces
-                        write("           ");
+                        write("           |");
         }
                 }
                 newLine();
@@ -226,7 +226,6 @@ public class CargoViewer {
                 }
 
             } catch (CargoException e) {
-                System.out.println(drawArray.get(0).get(0));
                 draw(drawArray);
 
             } finally {
