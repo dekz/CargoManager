@@ -35,6 +35,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     private JTextField           input;
     private final CargoInventory inventory;
     private ContainerLabel       currentContainer;
+    private final CargoViewer    viewer;
 
     public CargoManagerPanel() throws IllegalArgumentException, CargoException,
             LabelException {
@@ -45,156 +46,160 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
          * ContainerLabel(1,1,1,1);
          */
         inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
-        inventory.loadContainer(new ContainerLabel(1,1,1,1));
-        inventory.loadContainer(new ContainerLabel(2,1,1,1));
-        inventory.loadContainer(new ContainerLabel(0,1,3,1));
+        inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(0, 1, 3, 1));
         // inventory.loadContainer(new ContainerLabel(4,1,1,1));
         // reDraw();
-        drawTopView();
+
+        viewer = new CargoViewer(inventory, display);
+        viewer.draw();
     }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
 
-	// @Override
-	public void actionPerformed(ActionEvent event) {
-		Object source = event.getSource();
+    // @Override
+    public void actionPerformed(ActionEvent event) {
+        Object source = event.getSource();
 
-		if ((currentContainer = getContainerFromInput()) != null) {
-			try {
-				System.out.println("loading container "
-						+ currentContainer.toString());
-				if (source == loadBtn) {
-					inventory.loadContainer(currentContainer);
-				} else if (source == unloadBtn) {
-					inventory.unloadContainer(currentContainer);
-				}
-				// reDraw();
-			} catch (CargoException e) {
-				message(e.getMessage());
-			}
-		} else {
-			input.setText("");
-			message("Invalid shipping container label");
-		}
-	}
+        if ((currentContainer = getContainerFromInput()) != null) {
+            try {
+                System.out.println("loading container "
+                        + currentContainer.toString());
+                if (source == loadBtn) {
+                    inventory.loadContainer(currentContainer);
+                } else if (source == unloadBtn) {
+                    inventory.unloadContainer(currentContainer);
+                }
 
-	private void message(String msg) {
-		JOptionPane.showMessageDialog(this, msg);
-	}
+                viewer.draw();
+            } catch (CargoException e) {
+                message(e.getMessage());
+            }
+        } else {
+            input.setText("");
+            message("Invalid shipping container label");
+        }
+    }
 
-	/**
-	 * Get and parse our input to add a container
-	 * @return
-	 */
-	private ContainerLabel getContainerFromInput() {
-		Pattern pattern = Pattern.compile("\\d{8}");
-		Matcher matcher = pattern.matcher(input.getText());
-		if (matcher.matches()) {
-			try {
-				Integer kind = Integer.parseInt(input.getText(0, 3));
-				Integer identifier = Integer.parseInt(input.getText(3, 5));
-				Integer kindLength = kind.toString().length();
-				Integer identifierLength = identifier.toString().length();
-				return new ContainerLabel(kind, kindLength, identifier,
-						identifierLength);
-			} catch (Exception e) {
-				return null;
-			} finally {
-				input.setText("");
-			}
-		}
-		return null;
-	}
+    private void message(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
 
-	/**
-	 * This is where we will actually draw all our GUI elements
-	 */
-	private void initialiseComponents() {
-		GridBagLayout layout = new GridBagLayout();
-		setLayout(layout);
+    /**
+     * Get and parse our input to add a container
+     * 
+     * @return
+     */
+    private ContainerLabel getContainerFromInput() {
+        Pattern pattern = Pattern.compile("\\d{8}");
+        Matcher matcher = pattern.matcher(input.getText());
+        if (matcher.matches()) {
+            try {
+                Integer kind = Integer.parseInt(input.getText(0, 3));
+                Integer identifier = Integer.parseInt(input.getText(3, 5));
+                Integer kindLength = kind.toString().length();
+                Integer identifierLength = identifier.toString().length();
+                return new ContainerLabel(kind, kindLength, identifier,
+                        identifierLength);
+            } catch (Exception e) {
+                return null;
+            } finally {
+                input.setText("");
+            }
+        }
+        return null;
+    }
 
-		initialiseTextDisplay();
-		initialiseButtons();
-	}
+    /**
+     * This is where we will actually draw all our GUI elements
+     */
+    private void initialiseComponents() {
+        GridBagLayout layout = new GridBagLayout();
+        setLayout(layout);
 
-	/**
-	 * 
-	 */
-	private void initialiseButtons() {
-		GridBagConstraints constraints = new GridBagConstraints();
+        initialiseTextDisplay();
+        initialiseButtons();
+    }
 
-		loadBtn = new JButton("Load");
-		loadBtn.addActionListener(this);
-		loadBtn.setVisible(true);
-		addToPanel(loadBtn, constraints, 0, 3, 1, 1);
+    /**
+     * 
+     */
+    private void initialiseButtons() {
+        GridBagConstraints constraints = new GridBagConstraints();
 
-		unloadBtn = new JButton("Unload");
-		unloadBtn.addActionListener(this);
-		unloadBtn.setVisible(true);
-		addToPanel(unloadBtn, constraints, 1, 3, 1, 1);
+        loadBtn = new JButton("Load");
+        loadBtn.addActionListener(this);
+        loadBtn.setVisible(true);
+        addToPanel(loadBtn, constraints, 0, 3, 1, 1);
 
-		repaint();
-	}
+        unloadBtn = new JButton("Unload");
+        unloadBtn.addActionListener(this);
+        unloadBtn.setVisible(true);
+        addToPanel(unloadBtn, constraints, 1, 3, 1, 1);
 
-	/**
-	 *  Initialize our textDisplay area
-	 */
-	private void initialiseTextDisplay() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.weightx = 100;
-		constraints.weighty = 100;
-		constraints.fill = GridBagConstraints.BOTH;
+        repaint();
+    }
 
-		// Text Area and Scroll Pane
-		display = new JTextArea(" ", 500, 500);
-		display.setEditable(false);
-		display.setLineWrap(false);
-		display.setFont(new Font("Courier New", Font.PLAIN, 12));
-		display.setBorder(BorderFactory.createEtchedBorder());
-		addToPanel(display, constraints, 0, 0, 4, 1);
+    /**
+     * Initialise our textDisplay area
+     */
+    private void initialiseTextDisplay() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.weightx = 100;
+        constraints.weighty = 100;
+        constraints.fill = GridBagConstraints.BOTH;
 
-		// input field
-		input = new JTextField();
-		input.addActionListener(this);
-		constraints.weighty = 1;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.anchor = GridBagConstraints.SOUTH;
-		addToPanel(input, constraints, 0, 1, 4, 1);
+        // Text Area and Scroll Pane
+        display = new JTextArea(" ", 500, 500);
+        display.setEditable(false);
+        display.setLineWrap(false);
+        display.setFont(new Font("Courier New", Font.PLAIN, 12));
+        display.setBorder(BorderFactory.createEtchedBorder());
+        addToPanel(display, constraints, 0, 0, 4, 1);
 
-		repaint();
-	}
+        // input field
+        input = new JTextField();
+        input.addActionListener(this);
+        constraints.weighty = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.SOUTH;
+        addToPanel(input, constraints, 0, 1, 4, 1);
 
-	/**
-	 * A convenience method to add a component to given grid bag layout
-	 * locations. Code due to Cay Horstmann
-	 * 
-	 * @author Cay Horstmann (via INB370)
-	 * @param c
-	 *            the component to add
-	 * @param constraints
-	 *            the grid bag constraints to use
-	 * @param x
-	 *            the x grid position
-	 * @param y
-	 *            the y grid position
-	 * @param w
-	 *            the grid width
-	 * @param h
-	 *            the grid height
-	 */
-	private void addToPanel(Component c, GridBagConstraints constraints, int x,
-			int y, int w, int h) {
-		constraints.gridx = x;
-		constraints.gridy = y;
-		constraints.gridwidth = w;
-		constraints.gridheight = h;
-		add(c, constraints);
-	}
+        repaint();
+    }
+
+    /**
+     * A convenience method to add a component to given grid bag layout
+     * locations. Code due to Cay Horstmann
+     * 
+     * @author Cay Horstmann (via INB370)
+     * @param c
+     *            the component to add
+     * @param constraints
+     *            the grid bag constraints to use
+     * @param x
+     *            the x grid position
+     * @param y
+     *            the y grid position
+     * @param w
+     *            the grid width
+     * @param h
+     *            the grid height
+     */
+    private void addToPanel(Component c, GridBagConstraints constraints, int x,
+            int y, int w, int h) {
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.gridwidth = w;
+        constraints.gridheight = h;
+        add(c, constraints);
+    }
 
     ArrayList<String> drawContainers(ContainerLabel[] containerLabels, int kind) {
 
@@ -347,8 +352,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
         int kind = 0;
         ContainerLabel[] localStack;
- 
-        
+
         // An array list which will write the containerlabel(top one) to the
         // first index, and a string which will represent an int to be the count
 
@@ -356,91 +360,86 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             while (true) {
                 localStack = inventory.toArray(kind);
                 if (localStack.length > 0) {
-                	if (localStack[0] != null) {
-                	//need to catch empty stacks
-                	ArrayList<String> localArrayListDump = new ArrayList<String>();
-                    int objectCount = 0;
-                    //find out how many objects we have so we don't hit some NUllPointers
-                    while (localStack[objectCount] != null)
-                    {
-                    	objectCount++;
-                    }
-                    //add our top container
-                    localArrayListDump.add(localStack[objectCount-1].toString());
-                    //add our count of containers 
-                	localArrayListDump.add(Integer.toString(objectCount));
+                    if (localStack[0] != null) {
+                        // need to catch empty stacks
+                        ArrayList<String> localArrayListDump = new ArrayList<String>();
+                        int objectCount = 0;
+                        // find out how many objects we have so we don't hit
+                        // some NUllPointers
+                        while (localStack[objectCount] != null) {
+                            objectCount++;
+                        }
+                        // add our top container
+                        localArrayListDump.add(localStack[objectCount - 1]
+                                .toString());
+                        // add our count of containers
+                        localArrayListDump.add(Integer.toString(objectCount));
 
-                    drawArray.add(localArrayListDump);
-                    
-                	} else
-                	{
-                		//if the all the containers have been unloaded and there are spaces
-                		ArrayList<String> localArrayListDump = new ArrayList<String>();
-                        localArrayListDump.add("        "); 
+                        drawArray.add(localArrayListDump);
+
+                    } else {
+                        // if the all the containers have been unloaded and
+                        // there are spaces
+                        ArrayList<String> localArrayListDump = new ArrayList<String>();
+                        localArrayListDump.add("        ");
                         localArrayListDump.add("0");
                         drawArray.add(localArrayListDump);
-                	}
-                	
-                	kind++;
+                    }
+
+                    kind++;
                 }
             }
         } catch (CargoException e) {
-        	//catches when we run out of stacks
+            // catches when we run out of stacks
             drawTopViewHelper(drawArray);
         } catch (Exception e) {
             message("Drawing error: " + e);
         }
-        
-        
-        
+
     }
-    
+
     /**
-     * 
      * @param drawArray
      */
-	void drawTopViewHelper(ArrayList<ArrayList<String>> drawArray) {
-		
-		//drawing of the top lines for how many stacks we have
-		for (ArrayList<String> arrayList2 : drawArray) {
-			display.append("-----------");
-		}
-		display.append("\n");
-		
-		//drawing the top most stack 
-		for (ArrayList<String> arrayList : drawArray) {
-			display.append("| ");
-			display.append("  "+arrayList.get(0) + "  ");
-		}
-		display.append("\n");
-		
-		//drawing the bottom lines of the topmost stack
-		for (ArrayList<String> arrayList2 : drawArray) {
-			display.append("-----------");
-		}
-		display.append("\n");
-		/*for (ArrayList<String> arrayList : drawArray) {
+    void drawTopViewHelper(ArrayList<ArrayList<String>> drawArray) {
 
-			display.append("| ");
-			display.append("     " + arrayList.get(1) + "      ");
-			
-			
-		}*/
-		
-		//quick and dirty Hack
-		//draw the totals of the stacks
-		for (int i = 0; i < drawArray.size()-1; i++) {
-			display.append("| ");
-			display.append("     " + drawArray.get(i).get(1) + "      ");
-			
-		}
-		display.append("|");
-		display.append("\n");
-		//draw the bottom lines of the totalbox
-		for (ArrayList<String> arrayList2 : drawArray) {
-			display.append("-----------");
-		}
-		
-	}
+        // drawing of the top lines for how many stacks we have
+        for (ArrayList<String> arrayList2 : drawArray) {
+            display.append("-----------");
+        }
+        display.append("\n");
+
+        // drawing the top most stack
+        for (ArrayList<String> arrayList : drawArray) {
+            display.append("| ");
+            display.append("  " + arrayList.get(0) + "  ");
+        }
+        display.append("\n");
+
+        // drawing the bottom lines of the topmost stack
+        for (ArrayList<String> arrayList2 : drawArray) {
+            display.append("-----------");
+        }
+        display.append("\n");
+        /*
+         * for (ArrayList<String> arrayList : drawArray) { display.append("|
+         * "); display.append(" " + arrayList.get(1) + " "); }
+         */
+
+        // quick and dirty Hack
+        // draw the totals of the stacks
+        for (int i = 0; i < drawArray.size() - 1; i++) {
+            display.append("| ");
+            display.append("     " + drawArray.get(i).get(1) + "      ");
+
+        }
+        display.append("|");
+        display.append("\n");
+        // draw the bottom lines of the totalbox
+        for (ArrayList<String> arrayList2 : drawArray) {
+            display.append("-----------");
+        }
+
+    }
 
 }
