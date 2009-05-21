@@ -199,16 +199,16 @@ public class CargoViewer {
 				// if the lists size is equal to or greater than the currentRow
 				// then we have something to draw
 
-				for (int j = 0; j < drawArray.size()-1; j++) {
+				for (int j = 0; j < drawArray.size() ; j++) {
 					if (drawArray.get(j).size() >= i) {
 						// we have something to draw
-						//check out out of bounds
+						// check out out of bounds
 						write("| ");
-						write(drawArray.get(j).get(i-1));
+						write(drawArray.get(j).get(i - 1));
 						write(" ");
 					} else {
 						// draw spaces
-						write("           ");	
+						write("           ");
 					}
 				}
 				newLine();
