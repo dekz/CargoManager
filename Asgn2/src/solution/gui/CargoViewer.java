@@ -57,6 +57,16 @@ public class CargoViewer {
             this.inventory = inventory;
             this.display = display;
         }
+
+        protected void write(String text) {
+            write(text, 1);
+        }
+
+        protected void write(String text, int times) {
+            for (int i = 0; i < times; ++i) {
+                display.append(text);
+            }
+        }
     }
 
     protected class TopViewer extends Viewer {
@@ -65,46 +75,32 @@ public class CargoViewer {
         }
 
         public void draw() {
-
             ArrayList<ArrayList<String>> drawArray = getData();
+            int size = drawArray.size();
 
             // drawing of the top lines for how many stacks we have
-            for (ArrayList<String> arrayList2 : drawArray) {
-                display.append("-----------");
-            }
-            display.append("\n");
+            write("-----------", size);
+            write("\n");
 
-            // drawing the top most stack
             for (ArrayList<String> arrayList : drawArray) {
-                display.append("| ");
-                display.append("  " + arrayList.get(0) + "  ");
+                write("|   " + arrayList.get(0) + "  ");
             }
-            display.append("\n");
+
+            write("\n");
 
             // drawing the bottom lines of the topmost stack
-            for (ArrayList<String> arrayList2 : drawArray) {
-                display.append("-----------");
-            }
-            display.append("\n");
-            /*
-             * for (ArrayList<String> arrayList : drawArray) {
-             * display.append("| "); display.append(" " + arrayList.get(1) + "
-             * "); }
-             */
+            write("-----------", size);
+            write("\n");
 
-            // quick and dirty Hack
             // draw the totals of the stacks
             for (int i = 0; i < drawArray.size() - 1; i++) {
-                display.append("| ");
-                display.append("     " + drawArray.get(i).get(1) + "      ");
+                write("|      " + drawArray.get(i).get(1) + "      ");
+            }
 
-            }
-            display.append("|");
-            display.append("\n");
-            // draw the bottom lines of the totalbox
-            for (ArrayList<String> arrayList2 : drawArray) {
-                display.append("-----------");
-            }
+            write("|\n");
+
+            // draw the bottom lines of the total box
+            write("-----------", size);
         }
 
         /**
