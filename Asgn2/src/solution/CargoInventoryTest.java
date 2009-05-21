@@ -123,8 +123,8 @@ public class CargoInventoryTest {
      * @throws CargoException
      */
     @Test(expected = CargoException.class)
-    public void testTooManyContainersForShip() throws LabelException,
-            CargoException {
+    public void testLoadContainerWhenTooManyContainersForShip()
+            throws LabelException, CargoException {
         inventory = new CargoInventory(100, 100, 2);
 
         // 3 containers regardless of kind for a ship that can only hold 2
@@ -152,8 +152,8 @@ public class CargoInventoryTest {
      * @throws CargoException
      */
     @Test(expected = CargoException.class)
-    public void testTooManyContainersForStack() throws LabelException,
-            CargoException {
+    public void testLoadContainerWhenTooManyContainersForStack()
+            throws LabelException, CargoException {
         inventory = new CargoInventory(100, 2, 100);
 
         // 3 containers of the same kind (so will be in the same stack)
@@ -180,7 +180,7 @@ public class CargoInventoryTest {
      * @throws CargoException
      */
     @Test(expected = CargoException.class)
-    public void testTooManyContainersForNumberOfStackKinds()
+    public void testLoadContainerWhenTooManyContainersForNumberOfStackKinds()
             throws LabelException, CargoException {
         inventory = new CargoInventory(2, 100, 100);
 
@@ -202,7 +202,7 @@ public class CargoInventoryTest {
     }
 
     @Test(expected = CargoException.class)
-    public void testLoadContainerThrowsCargoExceptionWhenInventoryHasMaxSizeOfZero()
+    public void testLoadContainerWhenLoadContainerThrowsCargoExceptionWhenInventoryHasMaxSizeOfZero()
             throws IllegalArgumentException, CargoException, LabelException {
         inventory = new CargoInventory(100, 100, 0);
         ContainerLabel container = new ContainerLabel(1, 1, 1, 1);
