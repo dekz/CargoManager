@@ -79,7 +79,6 @@ public class CargoInventoryTest {
         int originalSize = inventory.toArray(1).length;
         inventory.loadContainer(containerOne);
         assertEquals(originalSize + 1, inventory.toArray(1).length);
-
     }
 
     @Test(expected = CargoException.class)
@@ -402,7 +401,11 @@ public class CargoInventoryTest {
         inventory.loadContainer(containerOne);
         inventory.loadContainer(containerTwo);
 
+        int originalSize = inventory.toArray(1).length;
+
         inventory.unloadContainer(containerTwo);
+
+        assertEquals(originalSize - 1, inventory.toArray(1).length);
     }
 
     @Test
