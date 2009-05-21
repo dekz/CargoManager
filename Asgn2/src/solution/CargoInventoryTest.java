@@ -104,8 +104,10 @@ public class CargoInventoryTest {
     public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelIsAddedTwice()
             throws IllegalArgumentException, LabelException, CargoException {
         // create two DIFFERENT objects with SAME parameters
+
         ContainerLabel container1 = new ContainerLabel(1, 1, 1, 1);
         ContainerLabel container2 = new ContainerLabel(1, 1, 1, 1);
+
         try {
             inventory.loadContainer(container1);
         } catch (CargoException e) {
