@@ -375,6 +375,31 @@ public class CargoInventoryTest {
 
     }
 
+    @Test
+    public void testIsAccessibleRegressionTestBasedOnGUIBugFound()
+            throws IllegalArgumentException, CargoException, LabelException {
+        inventory = new CargoInventory(6, 6, 20);
+
+        inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(3, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 2, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 3, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 4, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 5, 1));
+
+        // unload some on the top
+        assertTrue(inventory.isAccessible(new ContainerLabel(0, 1, 1, 1)));
+        assertTrue(inventory.isAccessible(new ContainerLabel(1, 1, 1, 1)));
+        assertTrue(inventory.isAccessible(new ContainerLabel(2, 1, 1, 1)));
+        assertTrue(inventory.isAccessible(new ContainerLabel(3, 1, 1, 1)));
+        assertTrue(inventory.isAccessible(new ContainerLabel(4, 1, 5, 1)));
+
+        assertFalse(inventory.isAccessible(new ContainerLabel(4, 1, 2, 1)));
+    }
+
     // unloadContainer() tests
     /**
      * This should not throw any exceptions as the container is the top of the
