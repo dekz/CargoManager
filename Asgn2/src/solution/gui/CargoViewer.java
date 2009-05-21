@@ -15,173 +15,173 @@ import solution.ContainerLabel;
  * @author Bodaniel Jeanes, Jacob Evans
  */
 public class CargoViewer {
-    private final SideViewer sideView;
-    private final TopViewer  topView;
-    private TYPE             type;
+	private final SideViewer sideView;
+	private final TopViewer topView;
+	private TYPE type;
 
-    public CargoViewer(CargoInventory inventory, JTextArea display) {
-        sideView = new SideViewer(inventory, display);
-        topView = new TopViewer(inventory, display);
-        type = TYPE.SIDE;
-    }
+	public CargoViewer(CargoInventory inventory, JTextArea display) {
+		sideView = new SideViewer(inventory, display);
+		topView = new TopViewer(inventory, display);
+		type = TYPE.SIDE;
+	}
 
-    public enum TYPE {
-        SIDE, TOP;
-    }
+	public enum TYPE {
+		SIDE, TOP;
+	}
 
-    public void draw() {
-        if (type == TYPE.SIDE) {
-            System.out.println("Displaying Side View");
-            sideView.draw();
-        } else if (type == TYPE.TOP) {
-            System.out.println("Displaying Top View");
-            topView.draw();
-        } else {
-            System.out.println("Unknown view type");
-        }
-    }
+	public void draw() {
+		if (type == TYPE.SIDE) {
+			System.out.println("Displaying Side View");
+			sideView.draw();
+		} else if (type == TYPE.TOP) {
+			System.out.println("Displaying Top View");
+			topView.draw();
+		} else {
+			System.out.println("Unknown view type");
+		}
+	}
 
-    public TYPE getType() {
-        return type;
-    }
+	public TYPE getType() {
+		return type;
+	}
 
-    public void setType(TYPE type) {
-        this.type = type;
-    }
+	public void setType(TYPE type) {
+		this.type = type;
+	}
 
-    protected class Viewer {
-        protected final CargoInventory inventory;
-        protected final JTextArea      display;
+	protected class Viewer {
+		protected final CargoInventory inventory;
+		protected final JTextArea display;
 
-        protected Viewer(CargoInventory inventory, JTextArea display) {
-            this.inventory = inventory;
-            this.display = display;
-        }
+		protected Viewer(CargoInventory inventory, JTextArea display) {
+			this.inventory = inventory;
+			this.display = display;
+		}
 
-        protected void clear() {
-            display.setText("");
-        }
+		protected void clear() {
+			display.setText("");
+		}
 
-        protected void newLine() {
-            write("\n");
-        }
+		protected void newLine() {
+			write("\n");
+		}
 
-        protected void write(String text) {
-            write(text, 1);
-        }
+		protected void write(String text) {
+			write(text, 1);
+		}
 
-        protected void write(String text, int times) {
-            for (int i = 0; i < times; ++i) {
-                display.append(text);
-            }
-        }
-    }
+		protected void write(String text, int times) {
+			for (int i = 0; i < times; ++i) {
+				display.append(text);
+			}
+		}
+	}
 
-    protected class TopViewer extends Viewer {
-        public TopViewer(CargoInventory inventory, JTextArea display) {
-            super(inventory, display);
-        }
+	protected class TopViewer extends Viewer {
+		public TopViewer(CargoInventory inventory, JTextArea display) {
+			super(inventory, display);
+		}
 
-        public void draw() {
-            clear();
-            // draw the top lines represting the top of the box
-            ArrayList<ArrayList<String>> drawArray = getData();
-            int size = drawArray.size();
+		public void draw() {
+			clear();
+			// draw the top lines represting the top of the box
+			ArrayList<ArrayList<String>> drawArray = getData();
+			int size = drawArray.size();
 
-            write("-----------", size);
-            newLine();
+			write("-----------", size);
+			newLine();
 
-            for (ArrayList<String> arrayList : drawArray) {
-                write("| " + arrayList.get(0) + " ");
-            }
-            write("|");
+			for (ArrayList<String> arrayList : drawArray) {
+				write("| " + arrayList.get(0) + " ");
+			}
+			write("|");
 
-            newLine();
-            write("-----------", size);
-            newLine();
+			newLine();
+			write("-----------", size);
+			newLine();
 
-            // draw the totals of the stacks
-            for (int i = 0; i < drawArray.size(); i++) {
-                write("|    " + drawArray.get(i).get(1) + "     ");
-            }
+			// draw the totals of the stacks
+			for (int i = 0; i < drawArray.size(); i++) {
+				write("|    " + drawArray.get(i).get(1) + "     ");
+			}
 
-            write("|");
-            newLine();
-            write("-----------", size);
-        }
+			write("|");
+			newLine();
+			write("-----------", size);
+		}
 
-        /**
-         * 
-         */
-        @SuppressWarnings("finally")
-        public ArrayList<ArrayList<String>> getData() {
-            ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
-            int kind = 0;
-            ContainerLabel[] stack;
+		/**
+		 * 
+		 */
+		@SuppressWarnings("finally")
+		public ArrayList<ArrayList<String>> getData() {
+			ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
+			int kind = 0;
+			ContainerLabel[] stack;
 
-            // An array list which will write the containerlabel(top one) to the
-            // first index, and a string which will represent an int to be the
-            // count
+			// An array list which will write the containerlabel(top one) to the
+			// first index, and a string which will represent an int to be the
+			// count
 
-            try {
-                while (true) {
-                    stack = inventory.toArray(kind);
-                    ArrayList<String> localArrayListDump = new ArrayList<String>();
-                    localArrayListDump.add("0");
-                    localArrayListDump.add("0");
-                    if (stack[0] != null) {
-                        // need to catch empty stacks
+			try {
+				while (true) {
+					stack = inventory.toArray(kind);
+					ArrayList<String> localArrayListDump = new ArrayList<String>();
+					localArrayListDump.add("0");
+					localArrayListDump.add("0");
+					if (stack[0] != null) {
+						// need to catch empty stacks
 
-                        int objectCount = 0;
-                        // find out how many objects we have so we don't hit
-                        // some NUllPointers
-                        while (stack[objectCount] != null) {
-                            objectCount++;
-                            if (objectCount == stack.length) {
-                                break;
-                            }
-                        }
-                        System.out.println(objectCount);
-                        // add our top container
-                        localArrayListDump.set(0, stack[objectCount - 1]
-                                .toString());
-                        // add our count of containers
-                        localArrayListDump
-                                .set(1, Integer.toString(objectCount));
+						int objectCount = 0;
+						// find out how many objects we have so we don't hit
+						// some NUllPointers
+						while (stack[objectCount] != null) {
+							objectCount++;
+							if (objectCount == stack.length) {
+								break;
+							}
+						}
+						System.out.println(objectCount);
+						// add our top container
+						localArrayListDump.set(0, stack[objectCount - 1]
+								.toString());
+						// add our count of containers
+						localArrayListDump
+								.set(1, Integer.toString(objectCount));
 
-                        drawArray.add(localArrayListDump);
+						drawArray.add(localArrayListDump);
 
-                    } else {
-                        // if the all the containers have been unloaded and
-                        // there are spaces
-                        localArrayListDump.set(0, "        ");
-                        localArrayListDump.set(1, "0");
-                        drawArray.add(localArrayListDump);
-                    }
+					} else {
+						// if the all the containers have been unloaded and
+						// there are spaces
+						localArrayListDump.set(0, "        ");
+						localArrayListDump.set(1, "0");
+						drawArray.add(localArrayListDump);
+					}
 
-                    kind++;
-                }
-            } catch (CargoException e) {
-                // catches when we run out of stacks, then we wait for finally
-                // to return the stack
-            } finally {
-                return drawArray;
-            }
-        }
-    }
+					kind++;
+				}
+			} catch (CargoException e) {
+				// catches when we run out of stacks, then we wait for finally
+				// to return the stack
+			} finally {
+				return drawArray;
+			}
+		}
+	}
 
-    protected class SideViewer extends Viewer {
-        public SideViewer(CargoInventory inventory, JTextArea display) {
-            super(inventory, display);
-        }
+	protected class SideViewer extends Viewer {
+		public SideViewer(CargoInventory inventory, JTextArea display) {
+			super(inventory, display);
+		}
 
-        public void draw() {
+		public void draw() {
             clear();
             ArrayList<ArrayList<String>> drawArray = getData();
             int maxStack = 0;
             int currentRow = 0;
             
-            //find the highest stack
+            // find the highest stack
             for (ArrayList<String> arrayList : drawArray) {
 				if (arrayList.size() > maxStack)
 				{
@@ -189,66 +189,55 @@ public class CargoViewer {
 				}
 			}
             
-            //we are drawing topdown
+            // we are drawing topdown
             currentRow = maxStack-1;
-           for (int j = maxStack-1; j < 0; j--) {
-			
-        	   for (int i = 0; i < drawArray.size(); i++) {
-        		  //draw the top most element
-        		   if (drawArray.get(i).size() <= j) {
-        			   //we have something to draw
-        		   } else
-        		   {
-        			   //we don't have anything to draw
-        		   }
+            //draw the top most strings if there are some, then move on through
+           // for (int i = maxStack; i == 0; i--) {
+            	
+            	/*//go through each one and draw the top most
+            	for (int j = 0; j < drawArray.size(); j++) {
+            		//if we have something to draw then draw it
+					if (!(drawArray.get(j).size() < i)) { 
+						write(drawArray.get(i).get(j));
+						
+					}*/
+            		
 				
-			}
-           }
-            
+				
+			//}
            
-           /*for (int i = 0; i < drawArray.size(); i++) {
-            	if (drawArray.get(i).size() != 0)
-            	{
-            		 write("| ");
-            		 write(drawArray.get(i).get(0));
-            	}else {
-            		write("EMPTY");
-            	}
-            	//write(drawArray.get(i).get(0));*/
 				
-			}
-            
-        }
+        	   
+           }
         
-        @SuppressWarnings("finally")
-        public ArrayList<ArrayList<String>> getData()
-        {
-        	ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
-        	ContainerLabel[] localLabels;
-        	int kind = 0;
-        	try {
-        		
-        		while (true) {
-            		ArrayList<String> localDump = new ArrayList<String>();
-                    localLabels = inventory.toArray(kind);
-                    
-                    for (ContainerLabel containerLabel : localLabels) {
+		@SuppressWarnings("finally")
+		public ArrayList<ArrayList<String>> getData() {
+			ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
+			ContainerLabel[] localLabels;
+			int kind = 0;
+			try {
+
+				while (true) {
+					ArrayList<String> localDump = new ArrayList<String>();
+					localLabels = inventory.toArray(kind);
+
+					for (ContainerLabel containerLabel : localLabels) {
 						if (containerLabel != null) {
-                    	 localDump.add(containerLabel.toString());
+							localDump.add(containerLabel.toString());
 						}
 					}
-                    
-                    System.out.println(kind + ": " + localDump.size());
-                    drawArray.add(localDump);
-                    kind++;
-                }
-        		
-        	} catch (CargoException e) {
-        		//end of the stack
-        		
-        	} finally {
-        		return drawArray;
-        	}
-        }
-    }
+
+					System.out.println(kind + ": " + localDump.size());
+					drawArray.add(localDump);
+					kind++;
+				}
+
+			} catch (CargoException e) {
+				// end of the stack
+
+			} finally {
+				return drawArray;
+			}
+		}
+	}
 }
