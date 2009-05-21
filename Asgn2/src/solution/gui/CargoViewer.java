@@ -137,7 +137,12 @@ public class CargoViewer {
                             // some NUllPointers
                             while (stack[objectCount] != null) {
                                 objectCount++;
+                                if (objectCount == 5)
+                                {
+                                	break;
+                                }
                             }
+                            System.out.println(objectCount);
                             // add our top container
                             localArrayListDump.set(0, stack[objectCount - 1]
                                     .toString());
@@ -162,7 +167,6 @@ public class CargoViewer {
                 // catches when we run out of stacks, then we wait for finally
                 // to return the stack
             } finally {
-            	System.out.println(drawArray.get(drawArray.size()-1).get(0));
                 return drawArray;
             }
         }
