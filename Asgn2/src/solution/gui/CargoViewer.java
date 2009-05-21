@@ -195,6 +195,12 @@ public class CargoViewer {
 			
         	   for (int i = 0; i < drawArray.size(); i++) {
         		  //draw the top most element
+        		   if (drawArray.get(i).size() <= j) {
+        			   //we have something to draw
+        		   } else
+        		   {
+        			   //we don't have anything to draw
+        		   }
 				
 			}
            }
