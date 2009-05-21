@@ -92,16 +92,17 @@ public class CargoViewer {
             newLine();
 
             for (ArrayList<String> arrayList : drawArray) {
-                write("|   " + arrayList.get(0) + "  ");
+                write("| " + arrayList.get(0) + " ");
             }
-
+            write("|");
+            
             newLine();
             write("-----------", size);
             newLine();
 
             // draw the totals of the stacks
-            for (int i = 0; i < drawArray.size() - 1; i++) {
-                write("|      " + drawArray.get(i).get(1) + "      ");
+            for (int i = 0; i < drawArray.size(); i++) {
+                write("|    " + drawArray.get(i).get(1) + "     ");
             }
 
             write("|");
@@ -125,10 +126,12 @@ public class CargoViewer {
             try {
                 while (true) {
                     stack = inventory.toArray(kind);
-                    
+                    ArrayList<String> localArrayListDump = new ArrayList<String>();
+                    localArrayListDump.add("0");
+                    localArrayListDump.add("0");
                         if (stack[0] != null) {
                             // need to catch empty stacks
-                            ArrayList<String> localArrayListDump = new ArrayList<String>();
+                           
                             int objectCount = 0;
                             // find out how many objects we have so we don't hit
                             // some NUllPointers
@@ -136,24 +139,22 @@ public class CargoViewer {
                                 objectCount++;
                             }
                             // add our top container
-                            localArrayListDump.add(stack[objectCount - 1]
+                            localArrayListDump.set(0, stack[objectCount - 1]
                                     .toString());
                             // add our count of containers
-                            localArrayListDump.add(Integer
+                            localArrayListDump.set(1, Integer
                                     .toString(objectCount));
 
                             drawArray.add(localArrayListDump);
-                            System.out.print(drawArray.size());
 
                         } else {
                             // if the all the containers have been unloaded and
                             // there are spaces
-                            ArrayList<String> localArrayListDump = new ArrayList<String>();
-                            localArrayListDump.add("        ");
-                            localArrayListDump.add("0");
+                            localArrayListDump.set(0, "        ");
+                            localArrayListDump.set(1,"0");
                             drawArray.add(localArrayListDump);
                         }
-
+                        
                         kind++;
                     
                 }
@@ -161,6 +162,7 @@ public class CargoViewer {
                 // catches when we run out of stacks, then we wait for finally
                 // to return the stack
             } finally {
+            	System.out.println(drawArray.get(drawArray.size()-1).get(0));
                 return drawArray;
             }
         }
