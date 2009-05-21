@@ -395,11 +395,22 @@ void drawTopView()
 
 void drawTopViewHelper(ArrayList<ArrayList<String>> drawAray)
 {
-	for (ArrayList<String> arrayList : drawAray) {
-		display.append(arrayList.get(0));
+	for (ArrayList<String> arrayList2 : drawAray) {
+		display.append("-----------");
 	}
 	display.append("\n");
 	for (ArrayList<String> arrayList : drawAray) {
+		display.append("| ");
+		display.append(arrayList.get(0));
+	}
+	display.append("\n");
+	for (ArrayList<String> arrayList2 : drawAray) {
+		display.append("-----------");
+	}
+	display.append("\n");
+	for (ArrayList<String> arrayList : drawAray) {
+		
+		display.append("| ");
 		display.append(arrayList.get(1));
 	}
 }
