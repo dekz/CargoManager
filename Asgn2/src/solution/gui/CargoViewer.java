@@ -59,7 +59,7 @@ public class CargoViewer {
         }
 
         protected void clear() {
-            display.setText("");
+            display.setText(" ");
         }
 
         protected void newLine() {
@@ -84,7 +84,7 @@ public class CargoViewer {
 
         public void draw() {
             clear();
-
+            //draw the top lines represting the top of the box
             ArrayList<ArrayList<String>> drawArray = getData();
             int size = drawArray.size();
 
@@ -125,7 +125,7 @@ public class CargoViewer {
             try {
                 while (true) {
                     stack = inventory.toArray(kind);
-                    if (stack.length > 0) {
+                    
                         if (stack[0] != null) {
                             // need to catch empty stacks
                             ArrayList<String> localArrayListDump = new ArrayList<String>();
@@ -143,6 +143,7 @@ public class CargoViewer {
                                     .toString(objectCount));
 
                             drawArray.add(localArrayListDump);
+                            System.out.print(drawArray.size());
 
                         } else {
                             // if the all the containers have been unloaded and
@@ -154,7 +155,7 @@ public class CargoViewer {
                         }
 
                         kind++;
-                    }
+                    
                 }
             } catch (CargoException e) {
                 // catches when we run out of stacks, then we wait for finally
