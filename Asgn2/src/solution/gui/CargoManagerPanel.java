@@ -82,22 +82,30 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             }
         } else {
             if (source == createBtn) {
-
+                createInventory();
             } else if (source == topViewBtn) {
-
+                viewer.setType(CargoViewer.TYPE.TOP);
+                viewer.draw();
             } else if (source == sideViewBtn) {
-
+                viewer.setType(CargoViewer.TYPE.SIDE);
+                viewer.draw();
             }
         }
     }
 
-    private void createInventory() throws IllegalArgumentException,
-            CargoException {
-        Integer numStacks = Integer.parseInt(numStacksInput.getText().trim());
-        Integer maxHeight = Integer.parseInt(maxHeightInput.getText().trim());
-        Integer maxContainers = Integer.parseInt(maxContainersInput.getText()
-                .trim());
-        createInventory(numStacks, maxHeight, maxContainers);
+    private void createInventory() {
+        try {
+            Integer numStacks = Integer.parseInt(numStacksInput.getText()
+                    .trim());
+            Integer maxHeight = Integer.parseInt(maxHeightInput.getText()
+                    .trim());
+            Integer maxContainers = Integer.parseInt(maxContainersInput
+                    .getText().trim());
+            createInventory(numStacks, maxHeight, maxContainers);
+        } catch (Exception e) {
+            message("Could not create inventory from given input: "
+                    + e.getMessage());
+        }
     }
 
     private void createInventory(Integer numStacks, Integer maxHeight,
