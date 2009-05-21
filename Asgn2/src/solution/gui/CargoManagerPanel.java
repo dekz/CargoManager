@@ -360,17 +360,21 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                 	//need to catch empty stacks
                 	ArrayList<String> localArrayListDump = new ArrayList<String>();
                     int objectCount = 0;
+                    //find out how many objects we have so we don't hit some NUllPointers
                     while (localStack[objectCount] != null)
                     {
                     	objectCount++;
                     }
+                    //add our top container
                     localArrayListDump.add(localStack[objectCount-1].toString());
+                    //add our count of containers 
                 	localArrayListDump.add(Integer.toString(objectCount));
+
                     drawArray.add(localArrayListDump);
                     
                 	} else
                 	{
-                		//this adds the extra 0
+                		//if the all the containers have been unloaded and there are spaces
                 		ArrayList<String> localArrayListDump = new ArrayList<String>();
                         localArrayListDump.add("        "); 
                         localArrayListDump.add("0");
