@@ -58,6 +58,14 @@ public class CargoViewer {
             this.display = display;
         }
 
+        protected void clear() {
+            display.setText("");
+        }
+
+        protected void newLine() {
+            write("\n");
+        }
+
         protected void write(String text) {
             write(text, 1);
         }
@@ -75,31 +83,29 @@ public class CargoViewer {
         }
 
         public void draw() {
+            clear();
+
             ArrayList<ArrayList<String>> drawArray = getData();
             int size = drawArray.size();
 
-            // drawing of the top lines for how many stacks we have
             write("-----------", size);
-            write("\n");
+            newLine();
 
             for (ArrayList<String> arrayList : drawArray) {
                 write("|   " + arrayList.get(0) + "  ");
             }
 
-            write("\n");
-
-            // drawing the bottom lines of the topmost stack
+            newLine();
             write("-----------", size);
-            write("\n");
+            newLine();
 
             // draw the totals of the stacks
             for (int i = 0; i < drawArray.size() - 1; i++) {
                 write("|      " + drawArray.get(i).get(1) + "      ");
             }
 
-            write("|\n");
-
-            // draw the bottom lines of the total box
+            write("|");
+            newLine();
             write("-----------", size);
         }
 
