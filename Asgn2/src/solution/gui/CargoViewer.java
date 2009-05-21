@@ -171,7 +171,7 @@ public class CargoViewer {
         }
 
         public void draw() {
-
+            clear();
         }
     }
 }
