@@ -177,6 +177,57 @@ public class CargoViewer {
 
         public void draw() {
             clear();
+            ArrayList<ArrayList<String>> drawArray = getData();
+            int maxStack = 0;
+            int currentStack = 0;
+            //find the highest stack
+            for (ArrayList<String> arrayList : drawArray) {
+				if (arrayList.size() > maxStack)
+				{
+					maxStack = arrayList.size();
+				}
+			}
+            
+            //we are drawing topdown
+            currentStack = maxStack;
+            
+            for (ArrayList<String> arrayList2 : drawArray) {
+            	if (arrayList2.size() >= currentStack)
+            	{
+            		//draw it
+            	} else {
+            		//draw empty boxes
+            	}
+			}
+            
+        }
+        
+        @SuppressWarnings("finally")
+        public ArrayList<ArrayList<String>> getData()
+        {
+        	ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
+        	ContainerLabel[] localLabels;
+        	int kind = 0;
+        	try {
+        		ArrayList<String> localDump = new ArrayList<String>();
+        		
+        		while (true) {
+        			
+        			localLabels = inventory.toArray(kind);
+        			for (ContainerLabel i : localLabels) {
+        				localDump.add(i.toString());
+					}
+        			
+        			drawArray.add(localDump);
+        			
+        		}
+        		
+        	} catch (CargoException e) {
+        		//end of the stack
+        		
+        	} finally {
+        		return drawArray;
+        	}
         }
     }
 }
