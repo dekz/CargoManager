@@ -72,10 +72,14 @@ public class CargoInventoryTest {
     }
 
     @Test
-    public void testLoadContainerWithNormalContainer() throws LabelException,
-            CargoException {
+    public void testLoadContainerWithNormalContainerIncrementsStackSize()
+            throws LabelException, CargoException {
         final ContainerLabel containerOne = new ContainerLabel(1, 1, 1, 1);
+
+        int originalSize = inventory.toArray(1).length;
         inventory.loadContainer(containerOne);
+        assertEquals(originalSize + 1, inventory.toArray(1).length);
+
     }
 
     @Test(expected = CargoException.class)

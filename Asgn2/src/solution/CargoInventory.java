@@ -119,10 +119,11 @@ public class CargoInventory {
             throw new CargoException("No such stack on this ship");
         }
 
-        final ContainerLabel[] returnArray = new ContainerLabel[maxHeight];
+        final ArrayList<ContainerLabel> stack = storage.get(kind);
+        final ContainerLabel[] returnArray = new ContainerLabel[stack.size()];
 
         if (kind < numStacks) {
-            return storage.get(kind).toArray(returnArray);
+            return stack.toArray(returnArray);
         } else {
             throw new CargoException("Kind it out of our range");
         }
