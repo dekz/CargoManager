@@ -44,14 +44,15 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             /* = new ContainerLabel(0,1,1,1);
             currentContainer = new ContainerLabel(1,1,1,1);*/
             inventory.loadContainer(new ContainerLabel(0,1,1,1));
-            inventory.loadContainer(new ContainerLabel(1,1,1,1));
-            inventory.loadContainer(new ContainerLabel(2,1,1,1));
-            inventory.loadContainer(new ContainerLabel(3,1,1,1));
-            inventory.loadContainer(new ContainerLabel(4,1,1,1));
+           // inventory.loadContainer(new ContainerLabel(1,1,1,1));
+           // inventory.loadContainer(new ContainerLabel(2,1,1,1));
+           // inventory.loadContainer(new ContainerLabel(3,1,1,1));
+           // inventory.loadContainer(new ContainerLabel(4,1,1,1));
         } catch (Exception e) {
 
         }
-        reDraw();
+        //reDraw();
+        drawTopView();
     }
 
     /*
@@ -360,4 +361,44 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     	
     	return returnArrayList;
     }
+
+
+void drawTopView()
+{
+	ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
+	int kind = 0;
+	ContainerLabel[] localStack;
+	//current thinking for this view
+	//An array list which will write the containerlabel(top one) to the first index, and a string which will represent an int to be the count
+	while (true)
+	{
+		try 
+		{
+			localStack = inventory.toArray(kind);
+			ArrayList<String> localArrayListDump = new ArrayList<String>();
+			localArrayListDump.add(localStack[localStack.length-1].toString()); //add the top element
+			localArrayListDump.add(Integer.toString(localStack.length));
+			drawArray.add(localArrayListDump);
+			kind++;
+		}
+		catch (CargoException e)
+		{
+			//we've hit the end of our bounds
+		}
+		
+	}
+	
+}
+
+void drawTopViewHelper(ArrayList<ArrayList<String>> drawAray)
+{
+	for (ArrayList<String> arrayList : drawAray) {
+		display.append(arrayList.get(0));
+	}
+	display.append("\n");
+	for (ArrayList<String> arrayList : drawAray) {
+		display.append(arrayList.get(1));
+	}
+}
+
 }
