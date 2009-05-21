@@ -375,11 +375,14 @@ void drawTopView()
 		try 
 		{
 			localStack = inventory.toArray(kind);
-			ArrayList<String> localArrayListDump = new ArrayList<String>();
-			localArrayListDump.add(localStack[localStack.length-1].toString()); //add the top element
-			localArrayListDump.add(Integer.toString(localStack.length));
-			drawArray.add(localArrayListDump);
-			kind++;
+			if (localStack.length > 0)
+			{
+				ArrayList<String> localArrayListDump = new ArrayList<String>();
+				localArrayListDump.add(localStack[localStack.length-1].toString()); //add the top element
+				localArrayListDump.add(Integer.toString(localStack.length));
+				drawArray.add(localArrayListDump);
+				kind++;
+			}
 		}
 		catch (CargoException e)
 		{
