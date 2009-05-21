@@ -84,6 +84,20 @@ public class CargoInventoryTest {
         inventory.loadContainer(new ContainerLabel(100, 3, 1, 1));
     }
 
+    @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsCargoExceptionWhenSameItemIsAddedTwice()
+            throws IllegalArgumentException, LabelException, CargoException {
+        ContainerLabel container = new ContainerLabel(100, 3, 1, 1);
+        try {
+            inventory.loadContainer(container);
+        } catch (CargoException e) {
+            fail("CargoException thrown too early");
+        }
+
+        // this call should throw the exception
+        inventory.loadContainer(container);
+    }
+
     /**
      * This will test to see if an exception is thrown if there are too many
      * kinds of containers for the ship
