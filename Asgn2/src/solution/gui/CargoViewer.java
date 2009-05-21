@@ -128,7 +128,9 @@ public class CargoViewer {
                     stack = inventory.toArray(kind);
                     String[] stackSummary = { "        ", "0" };
 
-                    if (stack[0] != null) {
+                    if ((stack.length > 0) && (stack[0] != null)) {
+
+                        System.out.println(stack.toString());
                         // add our top container identifier
                         stackSummary[0] = stack[stack.length - 1].toString();
 
