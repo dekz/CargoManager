@@ -248,8 +248,30 @@ public class CargoInventoryTest {
         inventory.loadContainer(container);
     }
 
-    // isOnboard() tests
+    @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsExceptionWhenSameLabelIsAddedToLastStack()
+            throws IllegalArgumentException, CargoException, LabelException {
+        inventory = new CargoInventory(6, 6, 20);
 
+        try {
+            inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
+            inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
+            inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
+            inventory.loadContainer(new ContainerLabel(3, 1, 1, 1));
+            inventory.loadContainer(new ContainerLabel(4, 1, 1, 1));
+            inventory.loadContainer(new ContainerLabel(4, 1, 2, 1));
+            inventory.loadContainer(new ContainerLabel(4, 1, 3, 1));
+            inventory.loadContainer(new ContainerLabel(4, 1, 4, 1));
+            inventory.loadContainer(new ContainerLabel(4, 1, 5, 1));
+            inventory.loadContainer(new ContainerLabel(5, 1, 4, 1));
+        } catch (CargoException e) {
+            fail("CargoException thrown too early");
+        }
+
+        inventory.loadContainer(new ContainerLabel(5, 1, 4, 1));
+    }
+
+    // isOnboard() tests
     @Test
     public void testIsOnboardWithOnlyOneItemInStack() throws LabelException,
             CargoException {
@@ -370,6 +392,35 @@ public class CargoInventoryTest {
         inventory.loadContainer(containerTwo);
 
         inventory.unloadContainer(containerTwo);
+    }
+
+    @Test
+    public void testUnloadContainerRegressionTestBasedOnGUIBugFound()
+            throws IllegalArgumentException, CargoException, LabelException {
+        inventory = new CargoInventory(6, 6, 20);
+
+        inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(3, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 2, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 3, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 4, 1));
+        inventory.loadContainer(new ContainerLabel(4, 1, 5, 1));
+
+        // unload some on the top
+        inventory.unloadContainer(new ContainerLabel(0, 1, 1, 1));
+        inventory.unloadContainer(new ContainerLabel(4, 1, 5, 1));
+
+        try {
+            // unload a container not on the top
+            inventory.unloadContainer(new ContainerLabel(4, 1, 2, 1));
+
+            // if the execution gets to hear, we have failed -- an exception
+            // should have been thrown
+            fail("Container on bottom was unloaded");
+        } catch (CargoException e) {}
     }
 
     /**
