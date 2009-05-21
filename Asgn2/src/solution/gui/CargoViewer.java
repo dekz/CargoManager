@@ -3,9 +3,13 @@
  */
 package solution.gui;
 
+import java.util.ArrayList;
+
 import javax.swing.JTextArea;
 
+import solution.CargoException;
 import solution.CargoInventory;
+import solution.ContainerLabel;
 
 /**
  * @author Bodaniel Jeanes, Jacob Evans
@@ -42,8 +46,8 @@ public class CargoViewer {
     }
 
     protected class Viewer {
-        private final CargoInventory inventory;
-        private final JTextArea      display;
+        protected final CargoInventory inventory;
+        protected final JTextArea      display;
 
         protected Viewer(CargoInventory inventory, JTextArea display) {
             this.inventory = inventory;
