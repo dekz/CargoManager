@@ -28,30 +28,26 @@ import solution.LabelException;
  * @author Bodaniel Jeanes and Jacob Evans
  */
 public class CargoManagerPanel extends JPanel implements ActionListener {
-    private JButton              loadBtn, unloadBtn, createBtn, topViewBtn,
+    private JButton        loadBtn, unloadBtn, createBtn, topViewBtn,
             sideViewBtn;
-    private JTextArea            display;
-    private JTextField           input, numStacksInput, maxHeightInput,
+    private JTextArea      display;
+    private JTextField     input, numStacksInput, maxHeightInput,
             maxContainersInput;
-    private final CargoInventory inventory;
-    private ContainerLabel       currentContainer;
-    private final CargoViewer    viewer;
+    private CargoInventory inventory;
+    private ContainerLabel currentContainer;
+    private CargoViewer    viewer;
 
     public CargoManagerPanel() throws IllegalArgumentException, CargoException,
             LabelException {
         initialiseComponents();
-        inventory = new CargoInventory(5, 5, 20);
-        /*
-         * = new ContainerLabel(0,1,1,1); currentContainer = new
-         * ContainerLabel(1,1,1,1);
-         */
+
+        createInventory(5, 5, 20);
+
         inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(0, 1, 3, 1));
-        // inventory.loadContainer(new ContainerLabel(4,1,1,1));
-        // reDraw();
-        viewer = new CargoViewer(inventory, display);
+
         viewer.draw();
     }
 
@@ -93,6 +89,22 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 
             }
         }
+    }
+
+    private void createInventory() throws IllegalArgumentException,
+            CargoException {
+        Integer numStacks = Integer.parseInt(numStacksInput.getText().trim());
+        Integer maxHeight = Integer.parseInt(maxHeightInput.getText().trim());
+        Integer maxContainers = Integer.parseInt(maxContainersInput.getText()
+                .trim());
+        createInventory(numStacks, maxHeight, maxContainers);
+    }
+
+    private void createInventory(Integer numStacks, Integer maxHeight,
+            Integer maxContainers) throws IllegalArgumentException,
+            CargoException {
+        inventory = new CargoInventory(numStacks, maxHeight, maxContainers);
+        viewer = new CargoViewer(inventory, display);
     }
 
     private void message(String msg) {
