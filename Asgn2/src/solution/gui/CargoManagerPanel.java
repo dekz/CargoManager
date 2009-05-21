@@ -47,8 +47,8 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
          */
         inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(1,1,1,1));
-        // inventory.loadContainer(new ContainerLabel(2,1,1,1));
-        // inventory.loadContainer(new ContainerLabel(3,1,1,1));
+        inventory.loadContainer(new ContainerLabel(2,1,1,1));
+        inventory.loadContainer(new ContainerLabel(0,1,3,1));
         // inventory.loadContainer(new ContainerLabel(4,1,1,1));
         // reDraw();
         drawTopView();
@@ -370,19 +370,19 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                 	if (localStack[0] != null) {
                 	//need to catch empty stacks
                 	ArrayList<String> localArrayListDump = new ArrayList<String>();
-                    localArrayListDump.add(localStack[0].toString()); // add the top element - this line is causing errors
                     int objectCount = 0;
                     while (localStack[objectCount] != null)
                     {
                     	objectCount++;
                     }
+                    localArrayListDump.add(localStack[objectCount-1].toString());
                 	localArrayListDump.add(Integer.toString(objectCount));
                     drawArray.add(localArrayListDump);
                     
                 	} else
                 	{
                 		ArrayList<String> localArrayListDump = new ArrayList<String>();
-                        localArrayListDump.add("       "); // add the top element - this line is causing errors
+                        localArrayListDump.add("        "); 
                         localArrayListDump.add("0");
                         drawArray.add(localArrayListDump);
                 	}
@@ -401,24 +401,24 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         
     }
     
-	void drawTopViewHelper(ArrayList<ArrayList<String>> drawAray) {
-		for (ArrayList<String> arrayList2 : drawAray) {
+	void drawTopViewHelper(ArrayList<ArrayList<String>> drawArray) {
+		for (ArrayList<String> arrayList2 : drawArray) {
 			display.append("-----------");
 		}
 		display.append("\n");
-		for (ArrayList<String> arrayList : drawAray) {
+		for (ArrayList<String> arrayList : drawArray) {
 			display.append("| ");
 			display.append("  "+arrayList.get(0) + "  ");
 		}
 		display.append("\n");
-		for (ArrayList<String> arrayList2 : drawAray) {
+		for (ArrayList<String> arrayList2 : drawArray) {
 			display.append("-----------");
 		}
 		display.append("\n");
-		for (ArrayList<String> arrayList : drawAray) {
+		for (ArrayList<String> arrayList : drawArray) {
 
 			display.append("| ");
-			display.append("" + arrayList.get(1) + " ");
+			display.append("     " + arrayList.get(1) + "      ");
 		}
 	}
 
