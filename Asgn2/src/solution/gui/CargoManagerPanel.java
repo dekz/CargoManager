@@ -46,9 +46,12 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
          * ContainerLabel(1,1,1,1);
          */
         inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(0, 1, 2, 1));
+        inventory.loadContainer(new ContainerLabel(0, 1, 3, 1));
+        inventory.loadContainer(new ContainerLabel(0, 1, 4, 1));
         inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(2, 1, 1, 1));
-        inventory.loadContainer(new ContainerLabel(0, 1, 3, 1));
+
         // inventory.loadContainer(new ContainerLabel(4,1,1,1));
         // reDraw();
         viewer = new CargoViewer(inventory, display);
