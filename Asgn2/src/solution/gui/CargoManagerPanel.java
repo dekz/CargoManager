@@ -65,6 +65,11 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
 
+        if (source == topViewBtn)
+        {
+        	viewer.draw();
+        }
+        
         if ((currentContainer = getContainerFromInput()) != null) {
             try {
                 System.out.println("loading container "
