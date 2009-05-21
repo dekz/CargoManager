@@ -35,7 +35,6 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     private JTextField           input;
     private final CargoInventory inventory;
     private ContainerLabel       currentContainer;
-   // private Integer				 maxCargoStacks = 5;
 
     public CargoManagerPanel() throws IllegalArgumentException, CargoException,
             LabelException {
@@ -87,6 +86,10 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		JOptionPane.showMessageDialog(this, msg);
 	}
 
+	/**
+	 * Get and parse our input to add a container
+	 * @return
+	 */
 	private ContainerLabel getContainerFromInput() {
 		Pattern pattern = Pattern.compile("\\d{8}");
 		Matcher matcher = pattern.matcher(input.getText());
@@ -107,7 +110,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		return null;
 	}
 
-	/*
+	/**
 	 * This is where we will actually draw all our GUI elements
 	 */
 	private void initialiseComponents() {
@@ -138,7 +141,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * 
+	 *  Initialize our textDisplay area
 	 */
 	private void initialiseTextDisplay() {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -194,24 +197,6 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 	}
 
     ArrayList<String> drawContainers(ContainerLabel[] containerLabels, int kind) {
-        // ------------ //12 Dashes
-        // | 01200432 | //
-        // ------------
-        // i.toString()
-        // display.getColumns()
-        // display.getRows()
-        // display.insert(string, int pos)
-        // display.setColumns(int)
-        // display.append(string)
-        // int asciiBoxWidth = 12;
-        /*
-         * for (ContainerLabel containerLabel : labels) { if (containerLabel !=
-         * null) { display.append("------------"); display.append("\n| ");
-         * display.append(containerLabel.toString()); display.append(" |\n");
-         * display.append("------------"); //display.insert("8", 11); //
-         * display.append(containerLabel.toString());
-         * //display.append("\n-----------\n"); } }
-         */
 
         ArrayList<String> stack = new ArrayList<String>();
 
@@ -355,11 +340,15 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         return returnArrayList;
     }
 
+    /**
+     * 
+     */
     void drawTopView() {
         ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
         int kind = 0;
         ContainerLabel[] localStack;
-        // current thinking for this view
+ 
+        
         // An array list which will write the containerlabel(top one) to the
         // first index, and a string which will represent an int to be the count
 
@@ -402,16 +391,26 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         
     }
     
+    /**
+     * 
+     * @param drawArray
+     */
 	void drawTopViewHelper(ArrayList<ArrayList<String>> drawArray) {
+		
+		//drawing of the top lines for how many stacks we have
 		for (ArrayList<String> arrayList2 : drawArray) {
 			display.append("-----------");
 		}
 		display.append("\n");
+		
+		//drawing the top most stack 
 		for (ArrayList<String> arrayList : drawArray) {
 			display.append("| ");
 			display.append("  "+arrayList.get(0) + "  ");
 		}
 		display.append("\n");
+		
+		//drawing the bottom lines of the topmost stack
 		for (ArrayList<String> arrayList2 : drawArray) {
 			display.append("-----------");
 		}
@@ -423,7 +422,9 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 			
 			
 		}*/
+		
 		//quick and dirty Hack
+		//draw the totals of the stacks
 		for (int i = 0; i < drawArray.size()-1; i++) {
 			display.append("| ");
 			display.append("     " + drawArray.get(i).get(1) + "      ");
@@ -431,6 +432,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		}
 		display.append("|");
 		display.append("\n");
+		//draw the bottom lines of the totalbox
 		for (ArrayList<String> arrayList2 : drawArray) {
 			display.append("-----------");
 		}
