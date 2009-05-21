@@ -381,6 +381,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
                     
                 	} else
                 	{
+                		//this adds the extra 0
                 		ArrayList<String> localArrayListDump = new ArrayList<String>();
                         localArrayListDump.add("        "); 
                         localArrayListDump.add("0");
@@ -415,11 +416,25 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 			display.append("-----------");
 		}
 		display.append("\n");
-		for (ArrayList<String> arrayList : drawArray) {
+		/*for (ArrayList<String> arrayList : drawArray) {
 
 			display.append("| ");
 			display.append("     " + arrayList.get(1) + "      ");
+			
+			
+		}*/
+		//quick and dirty Hack
+		for (int i = 0; i < drawArray.size()-1; i++) {
+			display.append("| ");
+			display.append("     " + drawArray.get(i).get(1) + "      ");
+			
 		}
+		display.append("|");
+		display.append("\n");
+		for (ArrayList<String> arrayList2 : drawArray) {
+			display.append("-----------");
+		}
+		
 	}
 
 }
