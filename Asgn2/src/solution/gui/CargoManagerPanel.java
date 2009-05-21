@@ -119,6 +119,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             CargoException {
         inventory = new CargoInventory(numStacks, maxHeight, maxContainers);
         viewer = new CargoViewer(inventory, display);
+        viewer.draw();
     }
 
     private void message(String msg) {
