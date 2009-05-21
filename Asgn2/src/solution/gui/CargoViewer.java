@@ -22,7 +22,7 @@ public class CargoViewer {
     public CargoViewer(CargoInventory inventory, JTextArea display) {
         sideView = new SideViewer(inventory, display);
         topView = new TopViewer(inventory, display);
-        type = TYPE.SIDE;
+        type = TYPE.TOP;
     }
 
     public enum TYPE {
@@ -31,9 +31,13 @@ public class CargoViewer {
 
     public void draw() {
         if (type == TYPE.SIDE) {
+            System.out.println("Displaying Side View");
             sideView.draw();
         } else if (type == TYPE.TOP) {
+            System.out.println("Displaying Top View");
             topView.draw();
+        } else {
+            System.out.println("Unknown view type");
         }
     }
 
@@ -60,13 +64,57 @@ public class CargoViewer {
             super(inventory, display);
         }
 
+        public void draw() {
+
+            ArrayList<ArrayList<String>> drawArray = getData();
+
+            // drawing of the top lines for how many stacks we have
+            for (ArrayList<String> arrayList2 : drawArray) {
+                display.append("-----------");
+            }
+            display.append("\n");
+
+            // drawing the top most stack
+            for (ArrayList<String> arrayList : drawArray) {
+                display.append("| ");
+                display.append("  " + arrayList.get(0) + "  ");
+            }
+            display.append("\n");
+
+            // drawing the bottom lines of the topmost stack
+            for (ArrayList<String> arrayList2 : drawArray) {
+                display.append("-----------");
+            }
+            display.append("\n");
+            /*
+             * for (ArrayList<String> arrayList : drawArray) {
+             * display.append("| "); display.append(" " + arrayList.get(1) + "
+             * "); }
+             */
+
+            // quick and dirty Hack
+            // draw the totals of the stacks
+            for (int i = 0; i < drawArray.size() - 1; i++) {
+                display.append("| ");
+                display.append("     " + drawArray.get(i).get(1) + "      ");
+
+            }
+            display.append("|");
+            display.append("\n");
+            // draw the bottom lines of the totalbox
+            for (ArrayList<String> arrayList2 : drawArray) {
+                display.append("-----------");
+            }
+        }
+
         /**
          * 
          */
-        public void draw() {
+        @SuppressWarnings("finally")
+        public ArrayList<ArrayList<String>> getData() {
             ArrayList<ArrayList<String>> drawArray = new ArrayList<ArrayList<String>>();
             int kind = 0;
-            ContainerLabel[] localStack;
+            ContainerLabel[] stack;
 
             // An array list which will write the containerlabel(top one) to the
             // first index, and a string which will represent an int to be the
@@ -74,19 +122,19 @@ public class CargoViewer {
 
             try {
                 while (true) {
-                    localStack = inventory.toArray(kind);
-                    if (localStack.length > 0) {
-                        if (localStack[0] != null) {
+                    stack = inventory.toArray(kind);
+                    if (stack.length > 0) {
+                        if (stack[0] != null) {
                             // need to catch empty stacks
                             ArrayList<String> localArrayListDump = new ArrayList<String>();
                             int objectCount = 0;
                             // find out how many objects we have so we don't hit
                             // some NUllPointers
-                            while (localStack[objectCount] != null) {
+                            while (stack[objectCount] != null) {
                                 objectCount++;
                             }
                             // add our top container
-                            localArrayListDump.add(localStack[objectCount - 1]
+                            localArrayListDump.add(stack[objectCount - 1]
                                     .toString());
                             // add our count of containers
                             localArrayListDump.add(Integer
@@ -107,12 +155,11 @@ public class CargoViewer {
                     }
                 }
             } catch (CargoException e) {
-                // catches when we run out of stacks
-                drawTopViewHelper(drawArray);
-            } catch (Exception e) {
-                // message("Drawing error: " + e);
+                // catches when we run out of stacks, then we wait for finally
+                // to return the stack
+            } finally {
+                return drawArray;
             }
-
         }
     }
 
