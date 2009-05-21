@@ -137,7 +137,7 @@ public class CargoViewer {
                             // some NUllPointers
                             while (stack[objectCount] != null) {
                                 objectCount++;
-                                if (objectCount == 5)
+                                if (objectCount == stack.length)
                                 {
                                 	break;
                                 }

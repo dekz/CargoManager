@@ -41,7 +41,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             LabelException {
         initialiseComponents();
 
-        createInventory(6, 5, 20);
+        createInventory(6, 6, 20);
 
         inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
         inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
