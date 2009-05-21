@@ -27,21 +27,16 @@ import solution.ContainerLabel;
  * @author Bodaniel Jeanes and Jacob Evans
  */
 public class CargoManagerPanel extends JPanel implements ActionListener {
-    private JButton        loadBtn;
-    private JButton        unloadBtn;
-    private JTextArea      display;
-    private JTextField     input;
-    private CargoInventory inventory;
-    private ContainerLabel currentContainer;
+    private JButton              loadBtn;
+    private JButton              unloadBtn;
+    private JTextArea            display;
+    private JTextField           input;
+    private final CargoInventory inventory;
+    private ContainerLabel       currentContainer;
 
-    public CargoManagerPanel() {
+    public CargoManagerPanel() throws IllegalArgumentException, CargoException {
         initialiseComponents();
-        try {
-            inventory = new CargoInventory(5, 5, 20);
-        } catch (Exception e) {
-
-        }
-        reDraw();
+        inventory = new CargoInventory(5, 5, 20);
     }
 
     /*
