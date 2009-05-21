@@ -35,6 +35,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     private JTextField           input;
     private final CargoInventory inventory;
     private ContainerLabel       currentContainer;
+   // private Integer				 maxCargoStacks = 5;
 
     public CargoManagerPanel() throws IllegalArgumentException, CargoException,
             LabelException {
@@ -45,7 +46,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
          * ContainerLabel(1,1,1,1);
          */
         inventory.loadContainer(new ContainerLabel(0, 1, 1, 1));
-        // inventory.loadContainer(new ContainerLabel(1,1,1,1));
+        inventory.loadContainer(new ContainerLabel(1,1,1,1));
         // inventory.loadContainer(new ContainerLabel(2,1,1,1));
         // inventory.loadContainer(new ContainerLabel(3,1,1,1));
         // inventory.loadContainer(new ContainerLabel(4,1,1,1));
@@ -147,7 +148,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		constraints.fill = GridBagConstraints.BOTH;
 
 		// Text Area and Scroll Pane
-		display = new JTextArea(" ", 100, 100);
+		display = new JTextArea(" ", 500, 500);
 		display.setEditable(false);
 		display.setLineWrap(false);
 		display.setFont(new Font("Courier New", Font.PLAIN, 12));
@@ -366,20 +367,40 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             while (true) {
                 localStack = inventory.toArray(kind);
                 if (localStack.length > 0) {
-                    ArrayList<String> localArrayListDump = new ArrayList<String>();
-                    localArrayListDump.add(localStack[localStack.length - 1]
-                            .toString()); // add the top element
-                    localArrayListDump.add(Integer.toString(localStack.length));
+                	if (localStack[0] != null) {
+                	//need to catch empty stacks
+                	ArrayList<String> localArrayListDump = new ArrayList<String>();
+                    localArrayListDump.add(localStack[0].toString()); // add the top element - this line is causing errors
+                    int objectCount = 0;
+                    while (localStack[objectCount] != null)
+                    {
+                    	objectCount++;
+                    }
+                	localArrayListDump.add(Integer.toString(objectCount));
                     drawArray.add(localArrayListDump);
-                    kind++;
+                    
+                	} else
+                	{
+                		ArrayList<String> localArrayListDump = new ArrayList<String>();
+                        localArrayListDump.add("       "); // add the top element - this line is causing errors
+                        localArrayListDump.add("0");
+                        drawArray.add(localArrayListDump);
+                	}
+                	
+                	kind++;
                 }
             }
         } catch (CargoException e) {
-            // we've hit the end of our bounds
+        	//catches when we run out of stacks
+            drawTopViewHelper(drawArray);
         } catch (Exception e) {
-            message("Drawing error");
+            message("Drawing error: " + e);
         }
-
+        
+        
+        
+    }
+    
 	void drawTopViewHelper(ArrayList<ArrayList<String>> drawAray) {
 		for (ArrayList<String> arrayList2 : drawAray) {
 			display.append("-----------");
@@ -387,7 +408,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		display.append("\n");
 		for (ArrayList<String> arrayList : drawAray) {
 			display.append("| ");
-			display.append(arrayList.get(0));
+			display.append("  "+arrayList.get(0) + "  ");
 		}
 		display.append("\n");
 		for (ArrayList<String> arrayList2 : drawAray) {
@@ -397,7 +418,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 		for (ArrayList<String> arrayList : drawAray) {
 
 			display.append("| ");
-			display.append(arrayList.get(1));
+			display.append("" + arrayList.get(1) + " ");
 		}
 	}
 
