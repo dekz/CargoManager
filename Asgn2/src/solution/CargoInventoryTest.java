@@ -413,8 +413,8 @@ public class CargoInventoryTest {
     @Test
     public void testToArray() throws LabelException, CargoException {
         final ContainerLabel containerOne = new ContainerLabel(1, 1, 1, 1);
-        final ContainerLabel containerTwo = new ContainerLabel(1, 1, 1, 2);
-        final ContainerLabel containerThree = new ContainerLabel(1, 1, 1, 3);
+        final ContainerLabel containerTwo = new ContainerLabel(1, 1, 2, 1);
+        final ContainerLabel containerThree = new ContainerLabel(1, 1, 3, 1);
         final ContainerLabel containerToNotInclude = new ContainerLabel(2, 1,
                 1, 1);
 
