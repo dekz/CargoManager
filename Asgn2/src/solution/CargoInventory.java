@@ -10,19 +10,6 @@ public class CargoInventory {
             currentContainers;
     ArrayList<ArrayList<ContainerLabel>> storage = new ArrayList<ArrayList<ContainerLabel>>();
 
-    /*
-     * @bjeanes just so you don't have to read the specs to understand this
-     * cargo is stored relative to eachother in a stack, can only remove the top
-     * most container cargo identification is 8 digits, zero-filled 01200432
-     * first 3 are the kind, last 5 are their identifier stored the cargo in a
-     * 2d Array list, an Arraylist within an ArrayList, accessing them by
-     * getting their "kind" this assumes that when stuff is stored the first
-     * container stacks will be something like 0 then the next stack is 1 there
-     * no way to change the size of the ships storage toArray method will return
-     * the given kinds elements in an array, could iterate over this
-     * currentContainers attribute to keep a count of how many containers on the
-     * ship
-     */
     public CargoInventory(Integer numStacks, Integer maxHeight,
             Integer maxContainers) throws CargoException,
             IllegalArgumentException {
