@@ -22,7 +22,7 @@ public class CargoViewer {
     public CargoViewer(CargoInventory inventory, JTextArea display) {
         sideView = new SideViewer(inventory, display);
         topView = new TopViewer(inventory, display);
-        type = TYPE.TOP;
+        type = TYPE.SIDE;
     }
 
     public enum TYPE {
@@ -190,13 +190,15 @@ public class CargoViewer {
             
             //we are drawing topdown
             currentStack = maxStack;
-            
+           // System.out.print(drawArray.get(0).get(0));
             for (ArrayList<String> arrayList2 : drawArray) {
             	if (arrayList2.size() >= currentStack)
             	{
             		//draw it
+            		write(arrayList2.get(currentStack-1));
             	} else {
             		//draw empty boxes
+            		write("            ");
             	}
 			}
             
@@ -216,10 +218,11 @@ public class CargoViewer {
         			localLabels = inventory.toArray(kind);
         			for (ContainerLabel i : localLabels) {
         				localDump.add(i.toString());
+        				System.out.print("added: " + i.toString());
 					}
         			
         			drawArray.add(localDump);
-        			
+        			kind++;
         		}
         		
         	} catch (CargoException e) {
