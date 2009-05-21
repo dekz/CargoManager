@@ -183,17 +183,22 @@ public class CargoViewer {
                     if (drawArray.get(j).size() >= i) {
                         // we have something to draw
                         // check out out of bounds
-                        write(" ");
+                        write("| ");
                         write(drawArray.get(j).get(i - 1));
-                        write(" |");
+                        write(" ");
                     }else if (drawArray.get(j).size() == 0)
                     {
-                        write ("|          |");
+                        write ("|          ");
                         
                     } else {
                         // draw spaces
-                        write("           ");
-        }
+                        write("|          ");
+                        
+                    }
+                    if (j == drawArray.size()-1)
+                    {
+                        write(" |");
+                    }
                 }
                 newLine();
 
