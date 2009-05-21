@@ -62,6 +62,12 @@ public class CargoInventory {
 		if (queryContainer != null) {
 			// go through the array check if we have the item in the list
 			for (ArrayList<ContainerLabel> i : storage) {
+				if (i.contains(queryContainer)) {
+					return true;
+				}
+			}
+
+			for (ArrayList<ContainerLabel> i : storage) {
 				for (ContainerLabel containerLabel : i) {
 					if (queryContainer.matches(containerLabel)) {
 						return true;
