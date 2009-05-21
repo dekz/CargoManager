@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -53,7 +54,7 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         inventory.loadContainer(new ContainerLabel(4, 1, 4, 1));
         inventory.loadContainer(new ContainerLabel(4, 1, 5, 1));
         inventory.loadContainer(new ContainerLabel(5, 1, 5, 1));
-        
+
 
         viewer.draw();
     }
@@ -71,11 +72,13 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         if ((source == loadBtn) || (source == unloadBtn)) {
             if ((currentContainer = getContainerFromInput()) != null) {
                 try {
-                    System.out.println("loading container "
-                            + currentContainer.toString());
                     if (source == loadBtn) {
+                        System.out.println("loading container "
+                                + currentContainer.toString());
                         inventory.loadContainer(currentContainer);
                     } else if (source == unloadBtn) {
+                        System.out.println("unloading container "
+                                + currentContainer.toString());
                         inventory.unloadContainer(currentContainer);
                     }
 
