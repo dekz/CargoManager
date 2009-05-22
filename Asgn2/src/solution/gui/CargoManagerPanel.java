@@ -39,15 +39,22 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
 
     public CargoManagerPanel() throws IllegalArgumentException, CargoException,
             LabelException {
-
         initialiseComponents();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+    /**
+     * @param numStacks
+     * @param maxHeight
+     * @param maxContainers
+     * @throws CargoException
+     * @throws IllegalArgumentException
      */
+    public CargoManagerPanel(Integer numStacks, Integer maxHeight,
+            Integer maxContainers) throws IllegalArgumentException,
+            CargoException {
+        initialiseComponents();
+        createInventory(numStacks, maxHeight, maxContainers);
+    }
 
     // @Override
     public void actionPerformed(ActionEvent event) {
