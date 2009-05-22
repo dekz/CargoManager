@@ -164,46 +164,48 @@ public class CargoViewer {
 
             // find the highest stack
             for (ArrayList<String> arrayList : drawArray) {
-                if (arrayList.size() > maxStack) {
-                    maxStack = arrayList.size();
-                }
+                maxStack = Math.max(arrayList.size(), maxStack);
             }
 
-            // we are drawing topdown
+            // so we can have an empty row on top for when the are no items
+            ++maxStack;
+
+            // we are drawing top down
             currentRow = maxStack;
 
             // draw the top most strings if there are some, then move on through
 
-            for (int i = currentRow; i >= 0; i--) {
+            for (int i = currentRow; i > 0; i--) {
                 // we start at the top row and go down
                 // if the lists size is equal to or greater than the currentRow
                 // then we have something to draw
 
-                for (int j = 0; j < drawArray.size() ; j++) {
+                for (int j = 0; j < drawArray.size(); j++) {
                     if (drawArray.get(j).size() >= i) {
                         // we have something to draw
                         // check out out of bounds
                         write("| ");
-                        write(drawArray.get(j).get(i - 1));
-                        write(" ");
-                    }else if (drawArray.get(j).size() == 0)
-                    {
-                        write ("|          ");
-                        
+                        try {
+                            write(drawArray.get(j).get(i - 1));
+                            write(" ");
+                        } catch (ArrayIndexOutOfBoundsException e) {}
                     } else {
                         // draw spaces
                         write("|          ");
-                        
                     }
-                    if (j == drawArray.size()-1)
-                    {
+
+                    if (j == drawArray.size() - 1) {
                         write(" |");
                     }
                 }
-                newLine();
 
+                newLine();
             }
 
+            write("|");
+            write("-----------", drawArray.size());
+            write("|");
+            // write("TEINRIETNHRSNIET");
         }
 
         @SuppressWarnings("finally")
@@ -223,9 +225,9 @@ public class CargoViewer {
                      * localDump.add(containerLabel.toString()); } }
                      */
 
-                    for (int i = 0; i < localLabels.length; i++) {
-                        if (localLabels[i] != null) {
-                            localDump.add(localLabels[i].toString());
+                    for (ContainerLabel element : localLabels) {
+                        if (element != null) {
+                            localDump.add(element.toString());
                         }
                     }
 
