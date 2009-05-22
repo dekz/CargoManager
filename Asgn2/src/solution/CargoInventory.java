@@ -138,8 +138,13 @@ public class CargoInventory {
 
         if (isOnboard(oldContainer)) {
             if (isAccessible(oldContainer)) {
-                // remove the container
-                storage.get(oldContainer.getKind()).remove(oldContainer);
+                // Find the right stack
+                int kind = oldContainer.getKind();
+                ArrayList<ContainerLabel> stack = storage.get(kind);
+
+                // Remove the container from the top of the stack
+                stack.remove(stack.size() - 1);
+
                 currentContainers--;
             } else {
                 throw new CargoException("Cannot access the container");
