@@ -394,16 +394,36 @@ public class CargoInventoryTest {
      * @throws CargoException
      */
     @Test
-    public void testUnloadTopContainer() throws LabelException, CargoException {
-        final ContainerLabel containerOne = new ContainerLabel(1, 1, 1, 1);
-        final ContainerLabel containerTwo = new ContainerLabel(1, 1, 2, 1);
+    public void testUnloadTopContainerUsingSameObject() throws LabelException,
+            CargoException {
+        final ContainerLabel container = new ContainerLabel(1, 1, 2, 1);
 
-        inventory.loadContainer(containerOne);
-        inventory.loadContainer(containerTwo);
+        inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
+        inventory.loadContainer(container);
 
         int originalSize = inventory.toArray(1).length;
 
-        inventory.unloadContainer(containerTwo);
+        inventory.unloadContainer(container);
+
+        assertEquals(originalSize - 1, inventory.toArray(1).length);
+    }
+
+    /**
+     * This should not throw any exceptions as the container is the top of the
+     * stack
+     * 
+     * @throws LabelException
+     * @throws CargoException
+     */
+    @Test
+    public void testUnloadTopContainerUsingDifferentObjectsWithSameParameters()
+            throws LabelException, CargoException {
+        inventory.loadContainer(new ContainerLabel(1, 1, 1, 1));
+        inventory.loadContainer(new ContainerLabel(1, 1, 2, 1));
+
+        int originalSize = inventory.toArray(1).length;
+
+        inventory.unloadContainer(new ContainerLabel(1, 1, 2, 1));
 
         assertEquals(originalSize - 1, inventory.toArray(1).length);
     }
