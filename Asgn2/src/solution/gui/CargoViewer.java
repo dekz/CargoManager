@@ -32,7 +32,7 @@ public class CargoViewer {
     public void draw() {
         if (type == TYPE.SIDE) {
             System.out.println("Displaying Side View");
-            sideView.getData();
+            sideView.draw();
         } else if (type == TYPE.TOP) {
             System.out.println("Displaying Top View");
             topView.draw();
@@ -159,9 +159,9 @@ public class CargoViewer {
             super(inventory, display);
         }
 
-        public void draw(ArrayList<ArrayList<String>> passedArray) {
+        public void draw() {
             clear();
-            ArrayList<ArrayList<String>> drawArray = passedArray;
+            ArrayList<ArrayList<String>> drawArray = getData();
             int maxStack = 0;
             int currentRow = 0;
 
@@ -237,10 +237,7 @@ public class CargoViewer {
                     kind++;
                 }
 
-            } catch (CargoException e) {
-                draw(drawArray);
-
-            } finally {
+            } catch (CargoException e) {} finally {
                 return drawArray;
             }
         }
