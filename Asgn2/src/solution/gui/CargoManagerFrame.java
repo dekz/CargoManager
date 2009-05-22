@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
  */
 public class CargoManagerFrame extends JFrame {
     // Display constants
-    protected static final int       WIDTH    = 600;
-    protected static final int       HEIGHT   = 500;
+    protected static final int       WIDTH    = 800;
+    protected static final int       HEIGHT   = 600;
     protected static final Dimension PREFSIZE = new Dimension(WIDTH, HEIGHT);
 
     public CargoManagerFrame() {
