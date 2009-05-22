@@ -89,6 +89,7 @@ public class CargoViewer {
             int size = drawArray.size();
 
             write("-----------", size);
+            write("-");
             newLine();
 
             for (String[] stackSummary : drawArray) {
@@ -98,16 +99,18 @@ public class CargoViewer {
 
             newLine();
             write("-----------", size);
+            write("-");
             newLine();
 
             // draw the totals of the stacks
             for (int i = 0; i < size; i++) {
-                write("|    " + drawArray.get(i)[1] + "     ");
+                write("|   (" + drawArray.get(i)[1] + ")    ");
             }
 
             write("|");
             newLine();
             write("-----------", size);
+            write("-");
         }
 
         /**
@@ -183,29 +186,28 @@ public class CargoViewer {
                 for (int j = 0; j < drawArray.size(); j++) {
                     if (drawArray.get(j).size() >= i) {
                         // we have something to draw
-                        // check out out of bounds
                         write("| ");
-                        try {
-                            write(drawArray.get(j).get(i - 1));
-                            write(" ");
-                        } catch (ArrayIndexOutOfBoundsException e) {}
+                        write(drawArray.get(j).get(i - 1));
+                        write(" ");
                     } else {
                         // draw spaces
                         write("|          ");
                     }
 
+                    // draw the closing wall if we are drawing the last stack
                     if (j == drawArray.size() - 1) {
                         write(" |");
                     }
                 }
 
                 newLine();
-            }
 
-            write("|");
-            write("-----------", drawArray.size());
-            write("|");
-            // write("TEINRIETNHRSNIET");
+                write("|");
+                write("-----------", drawArray.size());
+                write("|");
+
+                newLine();
+            }
         }
 
         @SuppressWarnings("finally")
