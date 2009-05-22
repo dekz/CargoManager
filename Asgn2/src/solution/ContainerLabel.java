@@ -27,12 +27,10 @@ public class ContainerLabel {
         }
 
         // Check that the label kind and identifier are valid range
-        if ((a_kindLength > 3) || (a_identifierLength > 5)) {
+        if ((a_kindLength > 3) || (a_kind > 999) || (a_identifier > 99999)
+                || (a_identifierLength > 5)) {
             throw new LabelException("Cannot assign that high a value");
         }
-
-        // TODO test to see if the length is larger than allowed values, smaller
-        // than the length
 
         identifier = a_identifier;
         kind = a_kind;
@@ -55,8 +53,7 @@ public class ContainerLabel {
             throw new IllegalArgumentException();
         }
 
-        if ((getKind() == a_label.getKind())
-                && (getIdentifier() == a_label.getIdentifier())) {
+        if (toString().equals(a_label.toString())) {
             return true;
         }
 

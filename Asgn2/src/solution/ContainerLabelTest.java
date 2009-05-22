@@ -111,6 +111,25 @@ public class ContainerLabelTest {
         assertEquals("01200432", labelTwo.toString());
     }
 
+    @Test
+    public void testToStringForIdentifiersWithMaximumValues()
+            throws IllegalArgumentException, LabelException {
+        assertEquals("00011111", (new ContainerLabel(0, 1, 11111, 5))
+                .toString());
+    }
+
+    @Test
+    public void testToStringForIdentifiersWithAlmostMaximumValues()
+            throws IllegalArgumentException, LabelException {
+        assertEquals("00001111", (new ContainerLabel(0, 1, 1111, 4)).toString());
+    }
+
+    @Test
+    public void testToStringForIdentifiersWithNormalValues()
+            throws IllegalArgumentException, LabelException {
+        assertEquals("00000111", (new ContainerLabel(0, 1, 111, 3)).toString());
+    }
+
     @Test(expected = LabelException.class)
     public void testIllegalConstructorNegativeValues() throws LabelException {
         new ContainerLabel(-1, -1, -1, -1);
@@ -124,6 +143,27 @@ public class ContainerLabelTest {
     @Test(expected = IllegalArgumentException.class)
     public void testMatchesThrowsIllegalArgumentExceptionWhenGivenNullParameter() {
         labelOne.matches(null);
+    }
+
+    @Test
+    public void testMatchesReturnsTrueForIdentifiersWithMaximumValues()
+            throws IllegalArgumentException, LabelException {
+        assertTrue((new ContainerLabel(0, 1, 11111, 5))
+                .matches(new ContainerLabel(0, 1, 11111, 5)));
+    }
+
+    @Test
+    public void testMatchesReturnsTrueForIdentifiersWithAlmostMaximumValues()
+            throws IllegalArgumentException, LabelException {
+        assertTrue((new ContainerLabel(0, 1, 1111, 4))
+                .matches(new ContainerLabel(0, 1, 1111, 4)));
+    }
+
+    @Test
+    public void testMatchesReturnsTrueForIdentifiersWithNormalValues()
+            throws IllegalArgumentException, LabelException {
+        assertTrue((new ContainerLabel(0, 1, 111, 3))
+                .matches(new ContainerLabel(0, 1, 111, 3)));
     }
 
     @Test
@@ -147,5 +187,26 @@ public class ContainerLabelTest {
 
         assertFalse(labelOne.matches(labelTwo));
         assertFalse(labelTwo.matches(labelOne));
+    }
+
+    @Test
+    public void testGetIdentifierForNormalValues()
+            throws IllegalArgumentException, LabelException {
+        ContainerLabel label = new ContainerLabel(0, 1, 111, 3);
+        assertEquals(Integer.valueOf(111), label.getIdentifier());
+    }
+
+    @Test
+    public void testGetIdentifierForAlmostMaxValues()
+            throws IllegalArgumentException, LabelException {
+        ContainerLabel label = new ContainerLabel(0, 1, 1111, 4);
+        assertEquals(Integer.valueOf(1111), label.getIdentifier());
+    }
+
+    @Test
+    public void testGetIdentifierForMaxValues()
+            throws IllegalArgumentException, LabelException {
+        ContainerLabel label = new ContainerLabel(0, 1, 11111, 5);
+        assertEquals(Integer.valueOf(11111), label.getIdentifier());
     }
 }
