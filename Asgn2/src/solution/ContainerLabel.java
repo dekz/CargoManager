@@ -20,9 +20,10 @@ public class ContainerLabel {
         }
 
         // No negative numbers supported
-        if ((a_kind < 0) || (a_identifier < 0) || (a_kindLength < 0)
-                || (a_identifierLength < 0)) {
-            throw new LabelException("Cannot give negative values to cargo");
+        if ((a_kind < 0) || (a_identifier < 0) || (a_kindLength <= 0)
+                || (a_identifierLength <= 0)) {
+            throw new LabelException(
+                    "Cannot give negative values for kind/identifier or zero lengths");
         }
 
         // Check that the label kind and identifier are valid range
