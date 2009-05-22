@@ -41,7 +41,6 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
             LabelException {
 
         initialiseComponents();
-        createInventory(6, 6, 20);
     }
 
     /*
@@ -53,6 +52,11 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
     // @Override
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
+
+        if ((source != createBtn) && (inventory == null)) {
+            message("You need to create a ship first");
+            return;
+        }
 
         if ((source == loadBtn) || (source == unloadBtn)) {
             if ((currentContainer = getContainerFromInput()) != null) {
@@ -109,6 +113,11 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         inventory = new CargoInventory(numStacks, maxHeight, maxContainers);
         viewer = new CargoViewer(inventory, display);
         viewer.draw();
+
+        loadBtn.setEnabled(true);
+        unloadBtn.setEnabled(true);
+        topViewBtn.setEnabled(true);
+        sideViewBtn.setEnabled(true);
     }
 
     private void message(String msg) {
@@ -160,11 +169,13 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         loadBtn = new JButton("Load");
         loadBtn.addActionListener(this);
         loadBtn.setVisible(true);
+        loadBtn.setEnabled(false);
         addToPanel(loadBtn, constraints, 0, 3, 1, 1);
 
         unloadBtn = new JButton("Unload");
         unloadBtn.addActionListener(this);
         unloadBtn.setVisible(true);
+        unloadBtn.setEnabled(false);
         addToPanel(unloadBtn, constraints, 1, 3, 1, 1);
 
         createBtn = new JButton("Create");
@@ -175,11 +186,13 @@ public class CargoManagerPanel extends JPanel implements ActionListener {
         topViewBtn = new JButton("Top View");
         topViewBtn.addActionListener(this);
         topViewBtn.setVisible(true);
+        topViewBtn.setEnabled(false);
         addToPanel(topViewBtn, constraints, 3, 8, 1, 1);
 
         sideViewBtn = new JButton("Side View");
         sideViewBtn.addActionListener(this);
         sideViewBtn.setVisible(true);
+        sideViewBtn.setEnabled(false);
         constraints.anchor = GridBagConstraints.EAST;
         addToPanel(sideViewBtn, constraints, 3, 7, 1, 1);
 

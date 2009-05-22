@@ -122,6 +122,72 @@ public class CargoInventoryTest {
     }
 
     @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelWithIdentifierWithMaximumDigitsMinusOneIsAddedTwice()
+            throws IllegalArgumentException, LabelException, CargoException {
+        ContainerLabel container1 = new ContainerLabel(1, 1, 1000, 4);
+        ContainerLabel container2 = new ContainerLabel(1, 1, 1000, 4);
+
+        try {
+            inventory.loadContainer(container1);
+        } catch (CargoException e) {
+            fail("CargoException thrown too early: " + e.getMessage());
+        }
+
+        // this call should throw the exception
+        inventory.loadContainer(container2);
+    }
+
+    @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelWithIdentifierWithMaximumDigitsIsAddedTwice()
+            throws IllegalArgumentException, LabelException, CargoException {
+        ContainerLabel container1 = new ContainerLabel(1, 1, 10000, 5);
+        ContainerLabel container2 = new ContainerLabel(1, 1, 10000, 5);
+
+        try {
+            inventory.loadContainer(container1);
+        } catch (CargoException e) {
+            fail("CargoException thrown too early: " + e.getMessage());
+        }
+
+        // this call should throw the exception
+        inventory.loadContainer(container2);
+    }
+
+    @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelWithKindWithMaximumDigitsMinusOneIsAddedTwice()
+            throws IllegalArgumentException, LabelException, CargoException {
+        inventory = new CargoInventory(999, 10, 20);
+        ContainerLabel container1 = new ContainerLabel(22, 2, 1, 1);
+        ContainerLabel container2 = new ContainerLabel(22, 2, 1, 1);
+
+        try {
+            inventory.loadContainer(container1);
+        } catch (CargoException e) {
+            fail("CargoException thrown too early: " + e.getMessage());
+        }
+
+        // this call should throw the exception
+        inventory.loadContainer(container2);
+    }
+
+    @Test(expected = CargoException.class)
+    public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelWithKindWithMaximumDigitsIsAddedTwice()
+            throws IllegalArgumentException, LabelException, CargoException {
+        inventory = new CargoInventory(999, 10, 20);
+        ContainerLabel container1 = new ContainerLabel(333, 3, 1, 1);
+        ContainerLabel container2 = new ContainerLabel(333, 3, 1, 1);
+
+        try {
+            inventory.loadContainer(container1);
+        } catch (CargoException e) {
+            fail("CargoException thrown too early: " + e.getMessage());
+        }
+
+        // this call should throw the exception
+        inventory.loadContainer(container2);
+    }
+
+    @Test(expected = CargoException.class)
     public void testLoadContainerThrowsCargoExceptionWhenSameContainerLabelIsAddedTwiceButNotConsecutively()
             throws IllegalArgumentException, LabelException, CargoException {
         // create two DIFFERENT objects with SAME parameters
